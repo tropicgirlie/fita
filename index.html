@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>VoiceNoite — Pense em voz alta. Escreva com clareza.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream: #FAF5F0;
+      --cream-line: rgba(35, 39, 51, 0.045);
+      --slate: #232733;
+      --slate-light: #2E3342;
+      --slate-muted: #6C717F;
+      --orange: #E86828;
+      --orange-hover: #D4581B;
+      --white: #FFFFFF;
+      --border: rgba(35, 39, 51, 0.1);
+      --serif: 'Newsreader', Georgia, serif;
+      --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--sans);
+      background-color: var(--cream);
+      background-image: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 31px,
+        var(--cream-line) 32px
+      );
+      color: var(--slate);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 440px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      padding-bottom: 84px;
+    }
+
+    /* Header */
+    header {
+      padding: 20px 20px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      font-family: var(--serif);
+      font-size: 26px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      color: var(--slate);
+    }
+    .brand span {
+      color: var(--orange);
+      font-style: italic;
+    }
+
+    .badge-pt {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(232, 104, 40, 0.12);
+      color: var(--orange);
+    }
+
+    /* Views */
+    .view { display: none; padding: 0 20px; flex: 1; }
+    .view.active { display: block; }
+
+    /* Hero Recorder Card (Dark Slate + Burnt Orange) */
+    .recorder-card {
+      background: var(--slate);
+      border-radius: 26px;
+      padding: 18px;
+      color: var(--white);
+      box-shadow: 0 20px 40px rgba(35, 39, 51, 0.16);
+      margin-bottom: 20px;
+    }
+
+    .style-row {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      scrollbar-width: none;
+    }
+    .style-row::-webkit-scrollbar { display: none; }
+
+    .style-pill {
+      flex: 0 0 auto;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.8);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .style-pill.active {
+      background: var(--white);
+      color: var(--slate);
+      border-color: var(--white);
+      font-weight: 600;
+    }
+
+    .orange-box {
+      background: var(--orange);
+      border-radius: 20px;
+      padding: 24px 18px 20px;
+      text-align: center;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+
+    .timer {
+      font-variant-numeric: tabular-nums;
+      font-size: 30px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      margin-bottom: 14px;
+    }
+
+    .waveform {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      height: 36px;
+      margin-bottom: 16px;
+    }
+    .bar {
+      width: 3px;
+      height: 8px;
+      background: rgba(255,255,255,0.88);
+      border-radius: 4px;
+      transition: height 0.08s ease;
+    }
+
+    .status-hint {
+      font-size: 12px;
+      color: rgba(255,255,255,0.88);
+      min-height: 18px;
+      margin-bottom: 12px;
+    }
+
+    .orange-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(0,0,0,0.16);
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+    .icon-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+    .pause-pill {
+      border: none;
+      background: rgba(0,0,0,0.18);
+      color: white;
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .main-record-wrap {
+      display: flex;
+      justify-content: center;
+      margin-top: 14px;
+    }
+    .main-record-btn {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 4px solid rgba(255,255,255,0.22);
+      background: var(--orange);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: transform 0.15s ease;
+    }
+    .main-record-btn:active { transform: scale(0.95); }
+    .main-record-btn .shape {
+      width: 22px;
+      height: 22px;
+      background: white;
+      border-radius: 50%;
+      transition: all 0.18s ease;
+    }
+    .main-record-btn.recording .shape {
+      border-radius: 5px;
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Live Transcript Preview */
+    .live-transcript {
+      margin-top: 12px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 13px;
+      line-height: 1.45;
+      color: rgba(255,255,255,0.85);
+      max-height: 82px;
+      overflow-y: auto;
+      display: none;
+    }
+    .live-transcript.visible { display: block; }
+
+    /* Filters & Notes List */
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 12px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .filter-bar::-webkit-scrollbar { display: none; }
+
+    .folder-tab {
+      border: none;
+      background: transparent;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--slate-muted);
+      padding: 4px 2px;
+      cursor: pointer;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+    }
+    .folder-tab.active {
+      color: var(--slate);
+      font-weight: 600;
+      border-bottom-color: var(--orange);
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.75);
+      font-size: 13px;
+      margin-bottom: 14px;
+      outline: none;
+      color: var(--slate);
+    }
+    .search-input:focus { border-color: var(--orange); background: white; }
+
+    .note-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px 18px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(35,39,51,0.04);
+      transition: transform 0.12s ease;
+    }
+    .note-card:hover { transform: translateY(-1px); }
+
+    .note-date {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 4px;
+    }
+    .note-title {
+      font-family: var(--serif);
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 1.25;
+      color: var(--slate);
+      margin-bottom: 6px;
+    }
+    .note-preview {
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--slate-muted);
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+    .tag-row { display: flex; gap: 6px; flex-wrap: wrap; }
+    .tag-chip {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: #F1ECE6;
+      color: var(--slate);
+    }
+
+    /* Note Detail Modal / View */
+    .detail-card {
+      background: var(--white);
+      border-radius: 24px;
+      border: 1px solid var(--border);
+      padding: 20px;
+      box-shadow: 0 14px 30px rgba(35,39,51,0.08);
+    }
+    .detail-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .seg-toggle {
+      background: #EFEAE4;
+      padding: 3px;
+      border-radius: 999px;
+      display: inline-flex;
+    }
+    .seg-btn {
+      border: none;
+      background: transparent;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--slate-muted);
+      cursor: pointer;
+    }
+    .seg-btn.active {
+      background: var(--white);
+      color: var(--slate);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    .detail-title {
+      font-family: var(--serif);
+      font-size: 28px;
+      line-height: 1.2;
+      text-align: center;
+      margin: 8px 0 10px;
+    }
+    .detail-body {
+      font-family: var(--serif);
+      font-size: 17px;
+      line-height: 1.65;
+      color: #2E3342;
+      white-space: pre-wrap;
+      margin-top: 18px;
+    }
+    .detail-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 22px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .btn {
+      flex: 1;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--cream);
+      color: var(--slate);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--orange);
+      border-color: var(--orange);
+      color: white;
+    }
+
+    /* Keyboard / Quick Mode View (Screenshot 3) */
+    .quick-box {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 18px;
+      box-shadow: 0 10px 25px rgba(35,39,51,0.06);
+    }
+    .quick-meta {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .select-pill {
+      flex: 1;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--cream);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--slate);
+    }
+    .quick-output {
+      min-height: 130px;
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+      font-family: var(--sans);
+      font-size: 14px;
+      line-height: 1.5;
+      resize: vertical;
+      margin-bottom: 12px;
+      color: var(--slate);
+    }
+
+    /* Settings View */
+    .settings-card {
+      background: var(--white);
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+    .field-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--slate);
+    }
+    .text-input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 32px);
+      max-width: 408px;
+      background: var(--slate);
+      border-radius: 22px;
+      padding: 8px 12px;
+      display: flex;
+      justify-content: space-around;
+      box-shadow: 0 14px 32px rgba(35,39,51,0.28);
+      z-index: 50;
+    }
+    .nav-btn {
+      border: none;
+      background: transparent;
+      color: rgba(255,255,255,0.6);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 14px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+    .nav-btn.active {
+      color: var(--white);
+      background: rgba(255,255,255,0.12);
+    }
+
+    .toast {
+      position: fixed;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--slate);
+      color: white;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 500;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      z-index: 100;
+    }
+    .toast.show { opacity: 1; }
+  </style>
+</head>
+<body>
+  <div id="toast" class="toast"></div>
+
+  <div class="app-shell">
+    <header>
+      <div class="brand">Voice<span>Noite</span></div>
+      <div class="badge-pt">PT-BR • IA Nativa</div>
+    </header>
+
+    <!-- VIEW 1: NOTES & RECORDER -->
+    <section id="view-notes" class="view active">
+      <div class="recorder-card">
+        <div class="style-row" id="style-row">
+          <button class="style-pill active" data-style="claro">Claro & Simples</button>
+          <button class="style-pill" data-style="diario">Diário</button>
+          <button class="style-pill" data-style="lista">Lista</button>
+          <button class="style-pill" data-style="blog">Post de Blog</button>
+          <button class="style-pill" data-style="email">E-mail</button>
+          <button class="style-pill" data-style="whatsapp">WhatsApp</button>
+        </div>
+
+        <div class="orange-box">
+          <div class="timer" id="timer">00:00</div>
+          <div class="waveform" id="waveform"></div>
+          <div class="status-hint" id="status-hint">Toque abaixo e fale naturalmente em português</div>
+          <div class="orange-controls">
+            <button class="icon-btn" id="btn-restart" title="Recomeçar" disabled>↺</button>
+            <button class="pause-pill" id="btn-pause" disabled>pausar</button>
+            <button class="icon-btn" id="btn-cancel" title="Cancelar" disabled>✕</button>
+          </div>
+          <div class="live-transcript" id="live-transcript"></div>
+        </div>
+
+        <div class="main-record-wrap">
+          <button class="main-record-btn" id="btn-record" title="Gravar / Concluir">
+            <div class="shape"></div>
+          </button>
+        </div>
+      </div>
+
+      <div class="filter-bar" id="folder-bar">
+        <button class="folder-tab active" data-folder="Todas">Todas</button>
+        <button class="folder-tab" data-folder="Ideias">Ideias</button>
+        <button class="folder-tab" data-folder="Diário">Diário</button>
+        <button class="folder-tab" data-folder="Trabalho">Trabalho</button>
+        <button class="folder-tab" data-folder="Leitura">Leitura</button>
+      </div>
+
+      <input type="search" id="search-input" class="search-input" placeholder="Buscar nas suas notas em português..." />
+
+      <div id="notes-list"></div>
+    </section>
+
+    <!-- VIEW 2: NOTE DETAIL -->
+    <section id="view-detail" class="view">
+      <div class="detail-card">
+        <div class="detail-top">
+          <button class="icon-btn" style="background:#EFEAE4; color:var(--slate);" id="btn-back">‹</button>
+          <div class="seg-toggle">
+            <button class="seg-btn active" id="tab-note">Nota</button>
+            <button class="seg-btn" id="tab-transcript">Transcrição</button>
+          </div>
+          <button class="icon-btn" style="background:#EFEAE4; color:var(--slate);" id="btn-delete">🗑</button>
+        </div>
+
+        <div class="note-date" style="text-align:center;" id="detail-date"></div>
+        <h1 class="detail-title" id="detail-title"></h1>
+        <div class="tag-row" style="justify-content:center;" id="detail-tags"></div>
+        <div class="detail-body" id="detail-body"></div>
+
+        <div class="detail-actions">
+          <button class="btn" id="btn-copy-note">Copiar texto</button>
+          <button class="btn btn-primary" id="btn-restyle">Reescrever estilo</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: TECLADO / MODO RÁPIDO -->
+    <section id="view-keyboard" class="view">
+      <h2 style="font-family:var(--serif); font-size:26px; margin-bottom:6px;">
+        Fale natural. <span style="color:var(--orange); font-style:italic;">Responda melhor.</span>
+      </h2>
+      <p style="font-size:13px; color:var(--slate-muted); margin-bottom:16px;">
+        Grave uma mensagem rápida para colar direto no WhatsApp, E-mail ou Slack.
+      </p>
+
+      <div class="quick-box">
+        <div class="quick-meta">
+          <select id="quick-style" class="select-pill">
+            <option value="whatsapp">Estilo: WhatsApp Natural</option>
+            <option value="claro">Estilo: Claro & Simples</option>
+            <option value="email">Estilo: E-mail Profissional</option>
+            <option value="lista">Estilo: Lista Rápida</option>
+          </select>
+        </div>
+        <textarea id="quick-output" class="quick-output" placeholder="Sua mensagem limpa em português aparecerá aqui..."></textarea>
+        <div style="display:flex; gap:10px;">
+          <button class="btn btn-primary" id="btn-quick-record">🎙️ Ditar em PT-BR</button>
+          <button class="btn" id="btn-quick-copy">Copiar</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 4: CONFIGURAÇÕES -->
+    <section id="view-settings" class="view">
+      <h2 style="font-family:var(--serif); font-size:26px; margin-bottom:14px;">Configurações</h2>
+
+      <div class="settings-card">
+        <label class="field-label">Modo de IA (OpenAI API Key opcional)</label>
+        <p style="font-size:12px; color:var(--slate-muted); margin-bottom:10px; line-height:1.45;">
+          Sem chave: usa reconhecimento nativo do navegador (<code>pt-BR</code>) + limpeza local de vícios de linguagem.<br>
+          Com chave OpenAI: grava áudio real e processa via <strong>Whisper (PT)</strong> + <strong>GPT-4o-mini</strong>.
+        </p>
+        <input type="password" id="api-key-input" class="text-input" placeholder="sk-..." />
+        <button class="btn btn-primary" style="width:100%;" id="btn-save-key">Salvar chave localmente</button>
+      </div>
+
+      <div class="settings-card">
+        <label class="field-label">Dialeto e Regras de Limpeza PT-BR</label>
+        <p style="font-size:13px; color:var(--slate-muted); line-height:1.5;">
+          • Remove vícios: <em>tipo, né, aí, assim, então, cara, enfim, sabe, tá ligado</em><br>
+          • Mantém ortografia e acentuação do Português Brasileiro<br>
+          • Evita traduções literais ou tom robótico
+        </p>
+      </div>
+    </section>
+
+    <nav class="bottom-nav">
+      <button class="nav-btn active" data-view="view-notes">📝<span>Notas</span></button>
+      <button class="nav-btn" data-view="view-keyboard">⌨️<span>Teclado</span></button>
+      <button class="nav-btn" data-view="view-settings">⚙️<span>Config</span></button>
+    </nav>
+  </div>
+
+  <script>
+    // ---------- SEED DATA (100% Brazilian Portuguese) ----------
+    const SEED_NOTES = [
+      {
+        id: '1',
+        date: '11 OUT, 2026',
+        title: 'Em defesa do tédio',
+        folder: 'Diário',
+        tags: ['hábitos', 'foco'],
+        style: 'Claro & Simples',
+        transcript: 'Ah, cara, tipo, eu tava na fila do café hoje e percebi que não lembro a última vez que fiquei entediado de verdade, sabe? Qualquer dois minutos livres eu já pego o celular. E aí é justamente nesses momentos, tipo no banho ou dirigindo, que vinham minhas melhores ideias.',
+        content: 'Não me lembro da última vez em que fiquei realmente entediado. Cada pequena brecha do dia é preenchida antes mesmo que eu perceba: o elevador, a fila do café, os trinta segundos antes de uma reunião começar. Uma manchete, uma mensagem, um vídeo que vou esquecer até a hora do almoço.\n\nO curioso é que essas pausas eram justamente o espaço onde meus melhores pensamentos surgiam. No chuveiro, numa viagem longa de carro, esperando um voo atrasado. O tédio nunca foi tempo perdido — era a sala onde minha mente precisava passear para algum lugar que eu não tinha planejado.'
+      },
+      {
+        id: '2',
+        date: '10 OUT, 2026',
+        title: 'Controle os esforços, não o resultado',
+        folder: 'Leitura',
+        tags: ['estoicismo', 'produto'],
+        style: 'Post de Blog',
+        transcript: 'Hoje me peguei atualizando o painel de lançamento de dez em dez minutos, tipo como se olhar os números fosse mudar alguma coisa. Os estoicos chamavam isso de dicotomia do controle. O que eu controlo é a qualidade do trabalho de hoje.',
+        content: 'Hoje me peguei atualizando o painel de métricas a cada dez minutos, como se observar os números fosse fazê-los subir. Não vai.\n\nO que eu realmente controlo é bem menor e mais honesto: o cuidado com que fiz o trabalho de hoje, as perguntas que fiz ao time e a forma como tratei as pessoas enquanto aguardávamos. Os estoicos chamavam isso de dicotomia do controle.\n\nEpitecto resumiu de forma simples: algumas coisas dependem de nós; outras, não.'
+      }
+    ];
+
+    // ---------- STATE ----------
+    let notes = JSON.parse(localStorage.getItem('voicenoite_notes') || 'null') || SEED_NOTES;
+    let selectedStyle = 'claro';
+    let selectedFolder = 'Todas';
+    let currentNoteId = null;
+    let detailTab = 'note';
+    let isRecording = false;
+    let isPaused = false;
+    let seconds = 0;
+    let timerInterval = null;
+    let waveInterval = null;
+    let recognition = null;
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let liveText = '';
+    let quickMode = false;
+
+    const STYLE_LABELS = {
+      claro: 'Claro & Simples',
+      diario: 'Diário',
+      lista: 'Lista',
+      blog: 'Post de Blog',
+      email: 'E-mail',
+      whatsapp: 'WhatsApp'
+    };
+
+    // ---------- UI ELEMENTS ----------
+    const waveformEl = document.getElementById('waveform');
+    for (let i = 0; i < 24; i++) {
+      const bar = document.createElement('div');
+      bar.className = 'bar';
+      waveformEl.appendChild(bar);
+    }
+    const bars = [...waveformEl.children];
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2600);
+    }
+
+    function saveNotes() {
+      localStorage.setItem('voicenoite_notes', JSON.stringify(notes));
+    }
+
+    function formatTime(sec) {
+      const m = String(Math.floor(sec / 60)).padStart(2, '0');
+      const s = String(sec % 60).padStart(2, '0');
+      return `${m}:${s}`;
+    }
+
+    function formatDatePT() {
+      const months = ['JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ'];
+      const d = new Date();
+      return `${String(d.getDate()).padStart(2,'0')} ${months[d.getMonth()]}, ${d.getFullYear()}`;
+    }
+
+    // ---------- PT-BR LOCAL CLEANER (Fallback when no API key) ----------
+    function cleanPortugueseLocal(raw, style) {
+      let text = (raw || '').trim();
+      if (!text) return { title: 'Nota sem áudio', content: 'Nenhum texto foi capturado.', tags: ['geral'] };
+
+      // Remove common Brazilian Portuguese spoken fillers
+      const fillers = /\b(tipo assim|tipo|né|aí|então|assim|sabe|cara|mano|véi|enfim|bom|olha|tá ligado|quer dizer|na verdade|ééé|hã|aham)\b[,]?/gi;
+      text = text.replace(fillers, '').replace(/\s{2,}/g, ' ').replace(/\s+([,.!?])/g, '$1').trim();
+      text = text.charAt(0).toUpperCase() + text.slice(1);
+      if (!/[.!?]$/.test(text)) text += '.';
+
+      const words = text.split(' ').slice(0, 5).join(' ').replace(/[,.!?]/g, '');
+      let title = words || 'Nova anotação';
+
+      if (style === 'lista') {
+        const parts = text.split(/[.;]+/).map(s => s.trim()).filter(Boolean);
+        text = parts.map(p => `• ${p.charAt(0).toUpperCase() + p.slice(1)}`).join('\n');
+        title = 'Lista rápida';
+      } else if (style === 'email') {
+        text = `Olá,\n\n${text}\n\nQualquer dúvida, estou à disposição.\n\nAbraço,`;
+        title = 'Rascunho de e-mail';
+      } else if (style === 'whatsapp') {
+        title = 'Mensagem rápida';
+      }
+
+      return { title, content: text, tags: [style === 'diario' ? 'diário' : 'ideias'] };
+    }
+
+    // ---------- OPENAI WHISPER + GPT REWRITER (PT-BR) ----------
+    async function processWithOpenAI(audioBlob, fallbackTranscript, style) {
+      const apiKey = localStorage.getItem('voicenoite_openai_key');
+      if (!apiKey) return null;
+
+      let transcript = fallbackTranscript;
+
+      // 1. Transcribe with Whisper tuned for PT-BR
+      if (audioBlob && audioBlob.size > 0) {
+        const form = new FormData();
+        form.append('file', audioBlob, 'audio.webm');
+        form.append('model', 'whisper-1');
+        form.append('language', 'pt');
+        form.append('prompt', 'Transcrição em português do Brasil com pontuação natural, nomes próprios e acentuação correta.');
+
+        const wRes = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${apiKey}` },
+          body: form
+        });
+        if (wRes.ok) {
+          const wData = await wRes.json();
+          if (wData.text) transcript = wData.text;
+        }
+      }
+
+      if (!transcript) return null;
+
+      // 2. Rewrite into clean PT-BR
+      const styleInstructions = {
+        claro: 'Texto claro, fluido e bem estruturado em parágrafos curtos, preservando a voz do autor.',
+        diario: 'Entrada de diário reflexiva, íntima e natural em primeira pessoa.',
+        lista: 'Lista objetiva com marcadores (•), agrupando ações e ideias principais.',
+        blog: 'Mini-artigo envolvente com abertura forte e conclusão memorável.',
+        email: 'E-mail profissional brasileiro: cordial, direto e bem educado (sem formalidade excessiva).',
+        whatsapp: 'Mensagem curta e natural de WhatsApp, clara e sem vícios de fala.'
+      };
+
+      const sysPrompt = `Você é um editor especialista em Português do Brasil (PT-BR).
+Transforme a transcrição de voz abaixo em um texto limpo e bem escrito.
+REGRAS:
+- Use estritamente Português do Brasil natural (nunca português europeu, nunca tradução literal).
+- Remova vícios de oralidade (tipo, né, aí, então, assim, cara, enfim, sabe, gaguejos e repetições).
+- Preserve fielmente as ideias, fatos e personalidade de quem falou.
+- Estilo solicitado: ${styleInstructions[style] || styleInstructions.claro}
+- Responda APENAS em JSON válido no formato:
+{"title": "Título curto e marcante", "content": "Texto reescrito", "tags": ["tag1", "tag2"]}`;
+
+      const gRes = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o-mini',
+          response_format: { type: 'json_object' },
+          messages: [
+            { role: 'system', content: sysPrompt },
+            { role: 'user', content: transcript }
+          ]
+        })
+      });
+
+      if (!gRes.ok) throw new Error('Erro na API OpenAI');
+      const gData = await gRes.json();
+      const parsed = JSON.parse(gData.choices[0].message.content);
+      return { ...parsed, transcript };
+    }
+
+    // ---------- RECORDING LOGIC ----------
+    async function startRecording(isQuick = false) {
+      quickMode = isQuick;
+      liveText = '';
+      audioChunks = [];
+      seconds = 0;
+      isRecording = true;
+      isPaused = false;
+
+      document.getElementById('timer').textContent = '00:00';
+      document.getElementById('btn-record').classList.add('recording');
+      document.getElementById('btn-pause').disabled = false;
+      document.getElementById('btn-restart').disabled = false;
+      document.getElementById('btn-cancel').disabled = false;
+      document.getElementById('status-hint').textContent = isQuick ? 'Ditando para o modo rápido...' : 'Ouvindo em Português (PT-BR)...';
+
+      const liveBox = document.getElementById('live-transcript');
+      liveBox.textContent = '';
+      liveBox.classList.add('visible');
+
+      // Timer & waveform animation
+      timerInterval = setInterval(() => {
+        if (!isPaused) {
+          seconds++;
+          document.getElementById('timer').textContent = formatTime(seconds);
+        }
+      }, 1000);
+
+      waveInterval = setInterval(() => {
+        bars.forEach(b => {
+          b.style.height = isPaused ? '6px' : `${Math.floor(Math.random() * 28) + 6}px`;
+        });
+      }, 110);
+
+      // Browser Speech Recognition (pt-BR)
+      const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (SpeechRec) {
+        recognition = new SpeechRec();
+        recognition.lang = 'pt-BR';
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.onresult = (e) => {
+          let finalStr = '';
+          let interimStr = '';
+          for (let i = 0; i < e.results.length; i++) {
+            const res = e.results[i][0].transcript;
+            if (e.results[i].isFinal) finalStr += res + ' ';
+            else interimStr += res;
+          }
+          liveText = (finalStr + interimStr).trim();
+          liveBox.textContent = liveText || 'Ouvindo...';
+        };
+        try { recognition.start(); } catch (_) {}
+      }
+
+      // MediaRecorder for Whisper
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
+        mediaRecorder.start();
+      } catch (err) {
+        showToast('Permita acesso ao microfone para gravar áudio.');
+      }
+    }
+
+    function resetRecorderUI() {
+      clearInterval(timerInterval);
+      clearInterval(waveInterval);
+      isRecording = false;
+      isPaused = false;
+      bars.forEach(b => b.style.height = '8px');
+      document.getElementById('btn-record').classList.remove('recording');
+      document.getElementById('btn-pause').disabled = true;
+      document.getElementById('btn-pause').textContent = 'pausar';
+      document.getElementById('btn-restart').disabled = true;
+      document.getElementById('btn-cancel').disabled = true;
+      document.getElementById('live-transcript').classList.remove('visible');
+      document.getElementById('status-hint').textContent = 'Toque abaixo e fale naturalmente em português';
+    }
+
+    async function finishRecording(cancel = false) {
+      if (recognition) { try { recognition.stop(); } catch (_) {} }
+
+      let audioBlob = null;
+      if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        audioBlob = await new Promise(resolve => {
+          mediaRecorder.onstop = () => {
+            mediaRecorder.stream.getTracks().forEach(t => t.stop());
+            resolve(new Blob(audioChunks, { type: 'audio/webm' }));
+          };
+          mediaRecorder.stop();
+        });
+      }
+
+      const capturedText = liveText;
+      resetRecorderUI();
+      if (cancel) return;
+
+      const activeStyle = quickMode ? document.getElementById('quick-style').value : selectedStyle;
+      document.getElementById('status-hint').textContent = 'Lapidando seu texto em português...';
+
+      let result = null;
+      try {
+        result = await processWithOpenAI(audioBlob, capturedText, activeStyle);
+      } catch (e) {
+        showToast('Erro na OpenAI — usando limpeza local PT-BR.');
+      }
+
+      if (!result) {
+        const local = cleanPortugueseLocal(capturedText, activeStyle);
+        result = { ...local, transcript: capturedText || local.content };
+      }
+
+      document.getElementById('status-hint').textContent = 'Toque abaixo e fale naturalmente em português';
+
+      if (quickMode) {
+        document.getElementById('quick-output').value = result.content;
+        showToast('Mensagem pronta para colar!');
+        return;
+      }
+
+      const folderMap = { diario: 'Diário', blog: 'Ideias', email: 'Trabalho', lista: 'Trabalho' };
+      const newNote = {
+        id: String(Date.now()),
+        date: formatDatePT(),
+        title: result.title || 'Nova nota',
+        folder: folderMap[activeStyle] || 'Ideias',
+        tags: (result.tags && result.tags.length) ? result.tags : ['voz'],
+        style: STYLE_LABELS[activeStyle],
+        transcript: result.transcript || capturedText,
+        content: result.content
+      };
+
+      notes.unshift(newNote);
+      saveNotes();
+      renderNotes();
+      openDetail(newNote.id);
+    }
+
+    // ---------- RENDERING ----------
+    function renderNotes() {
+      const q = document.getElementById('search-input').value.toLowerCase();
+      const list = document.getElementById('notes-list');
+
+      const filtered = notes.filter(n => {
+        const matchFolder = selectedFolder === 'Todas' || n.folder === selectedFolder;
+        const matchQuery = !q || n.title.toLowerCase().includes(q) || n.content.toLowerCase().includes(q);
+        return matchFolder && matchQuery;
+      });
+
+      if (!filtered.length) {
+        list.innerHTML = `<p style="text-align:center; color:var(--slate-muted); font-size:13px; padding:24px;">Nenhuma nota encontrada.</p>`;
+        return;
+      }
+
+      list.innerHTML = filtered.map(n => `
+        <div class="note-card" onclick="openDetail('${n.id}')">
+          <div class="note-date">${n.date} • ${n.style}</div>
+          <div class="note-title">${n.title}</div>
+          <div class="note-preview">${n.content}</div>
+          <div class="tag-row">
+            ${n.tags.map(t => `<span class="tag-chip">${t}</span>`).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function openDetail(id) {
+      currentNoteId = id;
+      detailTab = 'note';
+      renderDetail();
+      switchView('view-detail');
+    }
+
+    function renderDetail() {
+      const n = notes.find(x => x.id === currentNoteId);
+      if (!n) return;
+      document.getElementById('detail-date').textContent = `${n.date} • ${n.style}`;
+      document.getElementById('detail-title').textContent = n.title;
+      document.getElementById('detail-tags').innerHTML = n.tags.map(t => `<span class="tag-chip">${t}</span>`).join('');
+      document.getElementById('detail-body').textContent = detailTab === 'note' ? n.content : (n.transcript || 'Transcrição indisponível.');
+
+      document.getElementById('tab-note').classList.toggle('active', detailTab === 'note');
+      document.getElementById('tab-transcript').classList.toggle('active', detailTab === 'transcript');
+    }
+
+    function switchView(viewId) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.getElementById(viewId).classList.add('active');
+      document.querySelectorAll('.nav-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.view === viewId);
+      });
+    }
+
+    // ---------- EVENTS ----------
+    document.getElementById('btn-record').addEventListener('click', () => {
+      if (!isRecording) startRecording(false);
+      else finishRecording(false);
+    });
+
+    document.getElementById('btn-pause').addEventListener('click', () => {
+      isPaused = !isPaused;
+      document.getElementById('btn-pause').textContent = isPaused ? 'retomar' : 'pausar';
+      if (mediaRecorder) isPaused ? mediaRecorder.pause() : mediaRecorder.resume();
+    });
+
+    document.getElementById('btn-cancel').addEventListener('click', () => finishRecording(true));
+    document.getElementById('btn-restart').addEventListener('click', async () => {
+      await finishRecording(true);
+      startRecording(false);
+    });
+
+    document.querySelectorAll('.style-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.style-pill').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedStyle = btn.dataset.style;
+      });
+    });
+
+    document.querySelectorAll('.folder-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.folder-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedFolder = btn.dataset.folder;
+        renderNotes();
+      });
+    });
+
+    document.getElementById('search-input').addEventListener('input', renderNotes);
+    document.getElementById('btn-back').addEventListener('click', () => switchView('view-notes'));
+    document.getElementById('tab-note').addEventListener('click', () => { detailTab = 'note'; renderDetail(); });
+    document.getElementById('tab-transcript').addEventListener('click', () => { detailTab = 'transcript'; renderDetail(); });
+
+    document.getElementById('btn-copy-note').addEventListener('click', () => {
+      const n = notes.find(x => x.id === currentNoteId);
+      if (!n) return;
+      navigator.clipboard.writeText(`${n.title}\n\n${n.content}`);
+      showToast('Nota copiada!');
+    });
+
+    document.getElementById('btn-delete').addEventListener('click', () => {
+      notes = notes.filter(x => x.id !== currentNoteId);
+      saveNotes();
+      renderNotes();
+      switchView('view-notes');
+      showToast('Nota excluída');
+    });
+
+    document.getElementById('btn-restyle').addEventListener('click', () => {
+      const n = notes.find(x => x.id === currentNoteId);
+      if (!n) return;
+      const cleaned = cleanPortugueseLocal(n.transcript || n.content, 'lista');
+      n.content = cleaned.content;
+      n.style = 'Lista';
+      saveNotes();
+      renderDetail();
+      showToast('Convertida em lista!');
+    });
+
+    // Quick / Keyboard Mode
+    document.getElementById('btn-quick-record').addEventListener('click', () => {
+      const btn = document.getElementById('btn-quick-record');
+      if (!isRecording) {
+        btn.textContent = '⏹️ Parar e Limpar';
+        startRecording(true);
+      } else {
+        btn.textContent = '🎙️ Ditar em PT-BR';
+        finishRecording(false);
+      }
+    });
+
+    document.getElementById('btn-quick-copy').addEventListener('click', () => {
+      const txt = document.getElementById('quick-output').value;
+      if (!txt) return;
+      navigator.clipboard.writeText(txt);
+      showToast('Copiado para colar no WhatsApp!');
+    });
+
+    // Settings
+    document.getElementById('api-key-input').value = localStorage.getItem('voicenoite_openai_key') || '';
+    document.getElementById('btn-save-key').addEventListener('click', () => {
+      const val = document.getElementById('api-key-input').value.trim();
+      if (val) localStorage.setItem('voicenoite_openai_key', val);
+      else localStorage.removeItem('voicenoite_openai_key');
+      showToast('Configuração salva!');
+    });
+
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      btn.addEventListener('click', () => switchView(btn.dataset.view));
+    });
+
+    renderNotes();
+  </script>
+</body>
+</html>
