@@ -3,517 +3,925 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>VoiceNoite — Pense em voz alta. Escreva com clareza.</title>
+  <title>VoiceNoite — Grave sua fita de pensamentos</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=Rubik+Mono+One&family=Share+Tech+Mono&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
   <style>
+    /* ==========================================================
+       VoiceNoite — Material 3 Expressive · Cassette Funk Edition
+       ========================================================== */
     :root {
-      --cream: #FAF5F0;
-      --cream-line: rgba(35, 39, 51, 0.045);
-      --slate: #232733;
-      --slate-light: #2E3342;
-      --slate-muted: #6C717F;
-      --orange: #E86828;
-      --orange-hover: #D4581B;
-      --white: #FFFFFF;
-      --border: rgba(35, 39, 51, 0.1);
-      --serif: 'Newsreader', Georgia, serif;
-      --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      /* Material 3 Expressive color tokens — funk palette */
+      --m-primary: #FF2E7E;              /* Hot magenta */
+      --m-on-primary: #FFFFFF;
+      --m-primary-container: #FFD9E4;
+      --m-on-primary-container: #3E0022;
+
+      --m-secondary: #FFB800;            /* Mustard gold */
+      --m-on-secondary: #2A1C00;
+      --m-secondary-container: #FFECB3;
+      --m-on-secondary-container: #291800;
+
+      --m-tertiary: #00D4C8;             /* Electric teal */
+      --m-on-tertiary: #00201E;
+      --m-tertiary-container: #B3F5EE;
+
+      --m-surface: #FDF7F2;              /* Warm cream */
+      --m-surface-container: #F5ECE2;
+      --m-surface-container-high: #EEE1D3;
+      --m-surface-container-highest: #E7D8C6;
+      --m-on-surface: #1C1B1F;
+      --m-on-surface-variant: #5B5560;
+      --m-outline: #CFC4B8;
+      --m-outline-variant: #E4D9CC;
+
+      /* Cassette aesthetic */
+      --cassette-body: #1A1625;          /* Deep eggplant */
+      --cassette-body-hi: #2A2235;
+      --cassette-label: #F2E4CE;         /* Vintage cream label */
+      --cassette-label-line: #D9C9AC;
+      --cassette-accent: #FF2E7E;
+      --cassette-tape: #2B1810;
+      --cassette-gold: #FFB800;
+      --cassette-teal: #00D4C8;
+
+      /* Shape tokens (Material 3 Expressive uses bolder radii) */
+      --shape-xs: 8px;
+      --shape-sm: 12px;
+      --shape-md: 16px;
+      --shape-lg: 24px;
+      --shape-xl: 28px;
+      --shape-xxl: 36px;
+      --shape-full: 999px;
+
+      /* Elevation (soft, warm shadows) */
+      --elev-1: 0 1px 2px rgba(26,22,37,0.08), 0 1px 3px rgba(26,22,37,0.05);
+      --elev-2: 0 2px 6px rgba(26,22,37,0.10), 0 4px 12px rgba(26,22,37,0.06);
+      --elev-3: 0 8px 20px rgba(26,22,37,0.14), 0 16px 36px rgba(255,46,126,0.08);
+
+      /* Type */
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-brand: 'Rubik Mono One', 'Impact', sans-serif;
+      --font-mono: 'Share Tech Mono', 'Courier New', monospace;
+      --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body { height: 100%; }
 
     body {
-      font-family: var(--sans);
-      background-color: var(--cream);
-      background-image: repeating-linear-gradient(
-        to bottom,
-        transparent 0px,
-        transparent 31px,
-        var(--cream-line) 32px
-      );
-      color: var(--slate);
+      font-family: var(--font-body);
+      color: var(--m-on-surface);
+      background: var(--m-surface);
+      background-image:
+        radial-gradient(circle at 10% 0%, rgba(255,46,126,0.08), transparent 35%),
+        radial-gradient(circle at 95% 10%, rgba(255,184,0,0.09), transparent 40%),
+        radial-gradient(circle at 50% 100%, rgba(0,212,200,0.07), transparent 45%);
       min-height: 100vh;
       display: flex;
       justify-content: center;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     .app-shell {
       width: 100%;
-      max-width: 440px;
+      max-width: 460px;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       position: relative;
-      padding-bottom: 84px;
+      padding-bottom: 96px;
     }
 
-    /* Header */
+    /* ==================== HEADER ==================== */
     header {
-      padding: 20px 20px 12px;
+      padding: 22px 20px 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
     .brand {
-      font-family: var(--serif);
-      font-size: 26px;
-      font-weight: 500;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+    .brand-mark {
+      font-family: var(--font-brand);
+      font-size: 22px;
       letter-spacing: -0.02em;
-      color: var(--slate);
+      color: var(--m-on-surface);
+      text-transform: uppercase;
+      line-height: 1;
     }
-    .brand span {
-      color: var(--orange);
-      font-style: italic;
+    .brand-mark em {
+      font-style: normal;
+      color: var(--m-primary);
+    }
+    .brand-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--m-primary);
+      box-shadow: 0 0 0 3px rgba(255,46,126,0.18);
     }
 
-    .badge-pt {
+    .chip-badge {
+      font-family: var(--font-mono);
       font-size: 11px;
-      font-weight: 600;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: rgba(232, 104, 40, 0.12);
-      color: var(--orange);
+      letter-spacing: 0.1em;
+      padding: 6px 12px;
+      border-radius: var(--shape-full);
+      background: var(--m-secondary-container);
+      color: var(--m-on-secondary-container);
+      border: 1px solid var(--cassette-gold);
+      text-transform: uppercase;
+      font-weight: 500;
     }
 
-    /* Views */
+    /* ==================== VIEW CONTAINERS ==================== */
     .view { display: none; padding: 0 20px; flex: 1; }
-    .view.active { display: block; }
-
-    /* Hero Recorder Card (Dark Slate + Burnt Orange) */
-    .recorder-card {
-      background: var(--slate);
-      border-radius: 26px;
-      padding: 18px;
-      color: var(--white);
-      box-shadow: 0 20px 40px rgba(35, 39, 51, 0.16);
-      margin-bottom: 20px;
+    .view.active { display: block; animation: viewFadeIn 0.25s ease; }
+    @keyframes viewFadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    .style-row {
+    /* ==================== CASSETTE RECORDER ==================== */
+    .cassette-stage {
+      margin-bottom: 24px;
+    }
+
+    .cassette {
+      background: linear-gradient(135deg, var(--cassette-body-hi) 0%, var(--cassette-body) 100%);
+      border-radius: var(--shape-xl);
+      padding: 16px 16px 20px;
+      box-shadow: var(--elev-3), inset 0 1px 0 rgba(255,255,255,0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Cassette top stripe accent */
+    .cassette::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 6px;
+      background: linear-gradient(90deg,
+        var(--m-primary) 0%,
+        var(--m-primary) 33%,
+        var(--m-secondary) 33%,
+        var(--m-secondary) 66%,
+        var(--m-tertiary) 66%,
+        var(--m-tertiary) 100%);
+    }
+
+    /* Label area (vintage cream label at top) */
+    .cassette-label {
+      background: var(--cassette-label);
+      background-image: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 23px,
+        var(--cassette-label-line) 24px
+      );
+      border-radius: var(--shape-md);
+      padding: 12px 14px;
+      margin-bottom: 14px;
+      position: relative;
+    }
+
+    .label-corner {
+      position: absolute;
+      top: 6px;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #998165;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.35);
+    }
+    .label-corner.tl { left: 6px; }
+    .label-corner.tr { right: 6px; }
+
+    .label-brand {
+      font-family: var(--font-brand);
+      font-size: 20px;
+      letter-spacing: -0.01em;
+      text-align: center;
+      color: #3a2912;
+      margin-bottom: 2px;
+    }
+    .label-sub {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-align: center;
+      color: #7a5a30;
+      text-transform: uppercase;
+    }
+
+    /* Style selector — Material 3 filter chips on the label */
+    .style-chips {
       display: flex;
       gap: 6px;
       overflow-x: auto;
-      padding-bottom: 12px;
+      margin-top: 10px;
+      padding: 2px 0 4px;
       scrollbar-width: none;
     }
-    .style-row::-webkit-scrollbar { display: none; }
+    .style-chips::-webkit-scrollbar { display: none; }
 
-    .style-pill {
+    .chip {
       flex: 0 0 auto;
-      border: 1px solid rgba(255,255,255,0.16);
-      background: rgba(255,255,255,0.06);
-      color: rgba(255,255,255,0.8);
-      padding: 6px 12px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-    .style-pill.active {
-      background: var(--white);
-      color: var(--slate);
-      border-color: var(--white);
+      font-family: var(--font-body);
+      font-size: 11px;
       font-weight: 600;
+      padding: 6px 12px;
+      border-radius: var(--shape-xs);
+      background: transparent;
+      color: #5a4530;
+      border: 1.5px solid #c4a876;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      white-space: nowrap;
+      letter-spacing: 0.02em;
+    }
+    .chip:hover { background: rgba(255,46,126,0.08); }
+    .chip.active {
+      background: var(--m-primary);
+      color: var(--m-on-primary);
+      border-color: var(--m-primary);
+      box-shadow: 0 2px 8px rgba(255,46,126,0.3);
     }
 
-    .orange-box {
-      background: var(--orange);
-      border-radius: 20px;
-      padding: 24px 18px 20px;
-      text-align: center;
+    /* Cassette window (where the reels sit) */
+    .cassette-window {
+      background: #0D0A14;
+      border-radius: var(--shape-md);
+      padding: 20px 16px 16px;
       position: relative;
-      transition: all 0.2s ease;
+      border: 1.5px solid #000;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.6);
     }
 
-    .timer {
+    .reel-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .reel {
+      width: 76px;
+      height: 76px;
+      flex: 0 0 76px;
+      position: relative;
+    }
+    .reel svg { width: 100%; height: 100%; display: block; }
+    .reel .hub {
+      transform-origin: 50% 50%;
+      transition: transform 0.15s ease;
+    }
+    .reel.spinning .hub {
+      animation: reelSpin 2.2s linear infinite;
+    }
+    .reel.spinning.fast .hub {
+      animation-duration: 1.2s;
+    }
+    @keyframes reelSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .center-display {
+      flex: 1;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .timer-digits {
+      font-family: var(--font-mono);
+      font-size: 32px;
+      letter-spacing: 0.08em;
+      color: var(--cassette-gold);
+      text-shadow: 0 0 10px rgba(255,184,0,0.4);
       font-variant-numeric: tabular-nums;
-      font-size: 30px;
-      font-weight: 500;
-      letter-spacing: 0.04em;
-      margin-bottom: 14px;
+      line-height: 1;
     }
 
     .waveform {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 4px;
-      height: 36px;
-      margin-bottom: 16px;
+      gap: 3px;
+      height: 20px;
+      width: 100%;
+      max-width: 120px;
     }
     .bar {
       width: 3px;
-      height: 8px;
-      background: rgba(255,255,255,0.88);
-      border-radius: 4px;
+      height: 4px;
+      background: var(--cassette-teal);
+      border-radius: 2px;
       transition: height 0.08s ease;
+      box-shadow: 0 0 4px rgba(0,212,200,0.4);
     }
 
-    .status-hint {
-      font-size: 12px;
-      color: rgba(255,255,255,0.88);
-      min-height: 18px;
-      margin-bottom: 12px;
+    .status-pill {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      color: rgba(242,228,206,0.6);
+      text-transform: uppercase;
+      min-height: 14px;
     }
 
-    .orange-controls {
+    /* Tape strip at the bottom of the cassette */
+    .tape-strip {
+      margin-top: 12px;
+      height: 10px;
+      background: var(--cassette-tape);
+      border-radius: 3px;
+      position: relative;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.6);
+    }
+    .tape-strip::before,
+    .tape-strip::after {
+      content: '';
+      position: absolute;
+      top: -4px;
+      bottom: -4px;
+      width: 24px;
+      background: var(--cassette-body);
+      border-radius: 2px;
+    }
+    .tape-strip::before { left: 20%; }
+    .tape-strip::after { right: 20%; }
+
+    /* Screws */
+    .cassette-screws {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      margin-top: 8px;
+      margin-top: 10px;
+      padding: 0 2px;
     }
-
-    .icon-btn {
-      width: 36px;
-      height: 36px;
+    .cassette-screws span {
+      width: 6px; height: 6px;
       border-radius: 50%;
-      border: none;
-      background: rgba(0,0,0,0.16);
-      color: white;
-      font-size: 15px;
-      cursor: pointer;
-      display: grid;
-      place-items: center;
+      background: #0a0812;
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.1);
+      position: relative;
     }
-    .icon-btn:disabled { opacity: 0.35; cursor: not-allowed; }
-
-    .pause-pill {
-      border: none;
-      background: rgba(0,0,0,0.18);
-      color: white;
-      padding: 6px 16px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
+    .cassette-screws span::after {
+      content: '';
+      position: absolute;
+      inset: 2px;
+      border-top: 1px solid #333;
     }
 
-    .main-record-wrap {
-      display: flex;
-      justify-content: center;
-      margin-top: 14px;
-    }
-    .main-record-btn {
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      border: 4px solid rgba(255,255,255,0.22);
-      background: var(--orange);
-      cursor: pointer;
-      display: grid;
-      place-items: center;
-      transition: transform 0.15s ease;
-    }
-    .main-record-btn:active { transform: scale(0.95); }
-    .main-record-btn .shape {
-      width: 22px;
-      height: 22px;
-      background: white;
-      border-radius: 50%;
-      transition: all 0.18s ease;
-    }
-    .main-record-btn.recording .shape {
-      border-radius: 5px;
-      width: 20px;
-      height: 20px;
-    }
-
-    /* Live Transcript Preview */
+    /* Live transcript inside cassette */
     .live-transcript {
       margin-top: 12px;
-      background: rgba(255,255,255,0.06);
-      border-radius: 12px;
+      background: rgba(242,228,206,0.06);
+      border: 1px solid rgba(242,228,206,0.12);
+      border-radius: var(--shape-sm);
       padding: 10px 12px;
+      font-family: var(--font-body);
       font-size: 13px;
-      line-height: 1.45;
-      color: rgba(255,255,255,0.85);
-      max-height: 82px;
+      line-height: 1.5;
+      color: rgba(242,228,206,0.9);
+      max-height: 90px;
       overflow-y: auto;
       display: none;
     }
     .live-transcript.visible { display: block; }
 
-    /* Filters & Notes List */
-    .filter-bar {
+    /* ==================== RECORD CONTROLS (Material 3 Expressive) ==================== */
+    .record-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .ctrl-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--shape-full);
+      border: 1.5px solid var(--m-outline);
+      background: var(--m-surface-container);
+      color: var(--m-on-surface);
+      font-size: 18px;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: all 0.18s ease;
+    }
+    .ctrl-btn:hover:not(:disabled) {
+      background: var(--m-surface-container-high);
+      transform: translateY(-1px);
+    }
+    .ctrl-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+    .record-fab {
+      width: 84px;
+      height: 84px;
+      border-radius: var(--shape-full);
+      border: 4px solid var(--m-surface);
+      background: var(--m-primary);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      box-shadow: var(--elev-3);
+      transition: all 0.2s cubic-bezier(.2,.9,.35,1.3);
+      position: relative;
+    }
+    .record-fab:hover { transform: scale(1.05); }
+    .record-fab:active { transform: scale(0.95); }
+    .record-fab .shape {
+      width: 28px; height: 28px;
+      background: white;
+      border-radius: 50%;
+      transition: all 0.2s cubic-bezier(.2,.9,.35,1.3);
+    }
+    .record-fab.recording { background: var(--cassette-body); animation: pulseRec 1.8s ease infinite; }
+    .record-fab.recording .shape { border-radius: 6px; width: 22px; height: 22px; background: var(--m-primary); }
+    @keyframes pulseRec {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255,46,126,0.6), var(--elev-3); }
+      50% { box-shadow: 0 0 0 16px rgba(255,46,126,0), var(--elev-3); }
+    }
+
+    .pause-pill {
+      border: none;
+      background: var(--m-surface-container-high);
+      color: var(--m-on-surface);
+      padding: 10px 18px;
+      border-radius: var(--shape-full);
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.02em;
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+
+    /* ==================== FOLDER TABS / SEARCH ==================== */
+    .folder-row {
       display: flex;
       gap: 8px;
-      align-items: center;
-      margin-bottom: 12px;
       overflow-x: auto;
+      margin-bottom: 14px;
       scrollbar-width: none;
     }
-    .filter-bar::-webkit-scrollbar { display: none; }
+    .folder-row::-webkit-scrollbar { display: none; }
 
     .folder-tab {
-      border: none;
+      flex: 0 0 auto;
+      border: 1.5px solid var(--m-outline-variant);
       background: transparent;
+      color: var(--m-on-surface-variant);
+      font-family: var(--font-body);
       font-size: 13px;
-      font-weight: 500;
-      color: var(--slate-muted);
-      padding: 4px 2px;
-      cursor: pointer;
-      white-space: nowrap;
-      border-bottom: 2px solid transparent;
-    }
-    .folder-tab.active {
-      color: var(--slate);
       font-weight: 600;
-      border-bottom-color: var(--orange);
+      padding: 8px 16px;
+      border-radius: var(--shape-full);
+      cursor: pointer;
+      transition: all 0.18s ease;
+      white-space: nowrap;
+    }
+    .folder-tab:hover { background: var(--m-surface-container); }
+    .folder-tab.active {
+      background: var(--m-primary-container);
+      color: var(--m-on-primary-container);
+      border-color: var(--m-primary-container);
     }
 
     .search-input {
       width: 100%;
-      padding: 10px 14px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.75);
-      font-size: 13px;
-      margin-bottom: 14px;
+      padding: 14px 18px;
+      border-radius: var(--shape-full);
+      border: 1.5px solid var(--m-outline-variant);
+      background: var(--m-surface-container);
+      font-family: var(--font-body);
+      font-size: 14px;
+      margin-bottom: 18px;
       outline: none;
-      color: var(--slate);
+      color: var(--m-on-surface);
+      transition: all 0.18s ease;
     }
-    .search-input:focus { border-color: var(--orange); background: white; }
+    .search-input::placeholder { color: var(--m-on-surface-variant); }
+    .search-input:focus {
+      border-color: var(--m-primary);
+      background: var(--m-surface);
+      box-shadow: 0 0 0 4px rgba(255,46,126,0.1);
+    }
 
+    /* ==================== NOTE CARDS (Material 3 Expressive) ==================== */
     .note-card {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 16px 18px;
-      margin-bottom: 12px;
+      background: var(--m-surface-container);
+      border: 1.5px solid var(--m-outline-variant);
+      border-radius: var(--shape-xl);
+      padding: 18px 20px;
+      margin-bottom: 14px;
       cursor: pointer;
-      box-shadow: 0 4px 14px rgba(35,39,51,0.04);
-      transition: transform 0.12s ease;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
     }
-    .note-card:hover { transform: translateY(-1px); }
+    .note-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+      background: var(--m-primary);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .note-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--elev-2);
+      border-color: var(--m-primary);
+    }
+    .note-card:hover::before { opacity: 1; }
+    .note-card:nth-child(3n+2)::before { background: var(--m-secondary); }
+    .note-card:nth-child(3n)::before { background: var(--m-tertiary); }
 
-    .note-date {
+    .note-meta {
+      font-family: var(--font-mono);
       font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--orange);
-      margin-bottom: 4px;
-    }
-    .note-title {
-      font-family: var(--serif);
-      font-size: 20px;
       font-weight: 500;
-      line-height: 1.25;
-      color: var(--slate);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--m-primary);
       margin-bottom: 6px;
+    }
+    .note-card:nth-child(3n+2) .note-meta { color: var(--m-on-secondary-container); }
+    .note-card:nth-child(3n) .note-meta { color: #00756D; }
+
+    .note-title {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--m-on-surface);
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
     }
     .note-preview {
       font-size: 13px;
-      line-height: 1.5;
-      color: var(--slate-muted);
+      line-height: 1.55;
+      color: var(--m-on-surface-variant);
       display: -webkit-box;
       -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
-      margin-bottom: 10px;
-    }
-    .tag-row { display: flex; gap: 6px; flex-wrap: wrap; }
-    .tag-chip {
-      font-size: 11px;
-      font-weight: 500;
-      padding: 3px 9px;
-      border-radius: 999px;
-      background: #F1ECE6;
-      color: var(--slate);
+      margin-bottom: 12px;
     }
 
-    /* Note Detail Modal / View */
+    .tag-row { display: flex; gap: 6px; flex-wrap: wrap; }
+    .tag-chip {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: var(--shape-xs);
+      background: var(--m-surface-container-high);
+      color: var(--m-on-surface-variant);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--m-on-surface-variant);
+    }
+    .empty-state .emoji { font-size: 40px; display: block; margin-bottom: 10px; }
+    .empty-state p { font-size: 14px; }
+
+    /* ==================== DETAIL VIEW ==================== */
     .detail-card {
-      background: var(--white);
-      border-radius: 24px;
-      border: 1px solid var(--border);
-      padding: 20px;
-      box-shadow: 0 14px 30px rgba(35,39,51,0.08);
+      background: var(--m-surface-container);
+      border-radius: var(--shape-xl);
+      border: 1.5px solid var(--m-outline-variant);
+      padding: 22px;
+      box-shadow: var(--elev-2);
     }
     .detail-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 22px;
     }
     .seg-toggle {
-      background: #EFEAE4;
-      padding: 3px;
-      border-radius: 999px;
+      background: var(--m-surface-container-high);
+      padding: 4px;
+      border-radius: var(--shape-full);
       display: inline-flex;
     }
     .seg-btn {
       border: none;
       background: transparent;
-      padding: 6px 14px;
-      border-radius: 999px;
+      padding: 8px 18px;
+      border-radius: var(--shape-full);
+      font-family: var(--font-body);
       font-size: 12px;
       font-weight: 600;
-      color: var(--slate-muted);
+      color: var(--m-on-surface-variant);
       cursor: pointer;
+      transition: all 0.2s;
     }
     .seg-btn.active {
-      background: var(--white);
-      color: var(--slate);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      background: var(--m-primary);
+      color: var(--m-on-primary);
+      box-shadow: 0 2px 6px rgba(255,46,126,0.3);
     }
 
-    .detail-title {
-      font-family: var(--serif);
-      font-size: 28px;
-      line-height: 1.2;
+    .detail-meta {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--m-primary);
       text-align: center;
-      margin: 8px 0 10px;
+      margin-bottom: 8px;
+    }
+    .detail-title {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1.15;
+      text-align: center;
+      letter-spacing: -0.02em;
+      color: var(--m-on-surface);
+      margin-bottom: 14px;
+    }
+    .detail-tags {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
     }
     .detail-body {
-      font-family: var(--serif);
+      font-family: var(--font-display);
       font-size: 17px;
-      line-height: 1.65;
-      color: #2E3342;
+      font-weight: 500;
+      line-height: 1.7;
+      color: var(--m-on-surface);
       white-space: pre-wrap;
-      margin-top: 18px;
     }
     .detail-actions {
       display: flex;
-      gap: 8px;
-      margin-top: 22px;
-      padding-top: 16px;
-      border-top: 1px solid var(--border);
+      gap: 10px;
+      margin-top: 26px;
+      padding-top: 20px;
+      border-top: 1px solid var(--m-outline-variant);
     }
+
     .btn {
       flex: 1;
-      padding: 10px 12px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      background: var(--cream);
-      color: var(--slate);
+      padding: 14px 16px;
+      border-radius: var(--shape-full);
+      border: 1.5px solid var(--m-outline);
+      background: var(--m-surface);
+      color: var(--m-on-surface);
+      font-family: var(--font-body);
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
+      transition: all 0.2s;
     }
+    .btn:hover { background: var(--m-surface-container); }
     .btn-primary {
-      background: var(--orange);
-      border-color: var(--orange);
-      color: white;
+      background: var(--m-primary);
+      border-color: var(--m-primary);
+      color: var(--m-on-primary);
+      box-shadow: var(--elev-1);
     }
+    .btn-primary:hover { background: #E8206F; }
 
-    /* Keyboard / Quick Mode View (Screenshot 3) */
-    .quick-box {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 22px;
-      padding: 18px;
-      box-shadow: 0 10px 25px rgba(35,39,51,0.06);
+    /* ==================== KEYBOARD / QUICK MODE ==================== */
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+      line-height: 1.1;
     }
-    .quick-meta {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-    .select-pill {
-      flex: 1;
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: var(--cream);
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--slate);
-    }
-    .quick-output {
-      min-height: 130px;
-      width: 100%;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 12px;
-      font-family: var(--sans);
+    .section-title em { font-style: italic; color: var(--m-primary); }
+    .section-sub {
       font-size: 14px;
+      color: var(--m-on-surface-variant);
+      margin-bottom: 20px;
       line-height: 1.5;
-      resize: vertical;
-      margin-bottom: 12px;
-      color: var(--slate);
     }
 
-    /* Settings View */
-    .settings-card {
-      background: var(--white);
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      padding: 18px;
+    .quick-box {
+      background: var(--m-surface-container);
+      border: 1.5px solid var(--m-outline-variant);
+      border-radius: var(--shape-xl);
+      padding: 20px;
+      box-shadow: var(--elev-1);
+    }
+
+    .select-pill {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: var(--shape-full);
+      border: 1.5px solid var(--m-outline);
+      background: var(--m-surface);
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--m-on-surface);
       margin-bottom: 14px;
+      cursor: pointer;
+    }
+
+    .quick-output {
+      width: 100%;
+      min-height: 140px;
+      border: 1.5px solid var(--m-outline-variant);
+      border-radius: var(--shape-md);
+      padding: 14px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      line-height: 1.55;
+      resize: vertical;
+      margin-bottom: 14px;
+      color: var(--m-on-surface);
+      background: var(--m-surface);
+      outline: none;
+    }
+    .quick-output:focus {
+      border-color: var(--m-primary);
+      box-shadow: 0 0 0 4px rgba(255,46,126,0.1);
+    }
+
+    /* ==================== SETTINGS ==================== */
+    .settings-card {
+      background: var(--m-surface-container);
+      border-radius: var(--shape-xl);
+      border: 1.5px solid var(--m-outline-variant);
+      padding: 20px;
+      margin-bottom: 14px;
+    }
+    .settings-card h3 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 18px;
+      margin-bottom: 6px;
+      letter-spacing: -0.01em;
+    }
+    .settings-card p {
+      font-size: 13px;
+      color: var(--m-on-surface-variant);
+      line-height: 1.55;
+      margin-bottom: 12px;
+    }
+    .settings-card code {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      background: var(--m-surface-container-high);
+      padding: 1px 6px;
+      border-radius: 4px;
     }
     .field-label {
       display: block;
-      font-size: 12px;
-      font-weight: 600;
-      margin-bottom: 6px;
-      color: var(--slate);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      color: var(--m-on-surface-variant);
     }
     .text-input {
       width: 100%;
-      padding: 10px 12px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
+      padding: 12px 14px;
+      border-radius: var(--shape-md);
+      border: 1.5px solid var(--m-outline);
+      background: var(--m-surface);
+      font-family: var(--font-mono);
       font-size: 13px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
+      color: var(--m-on-surface);
+      outline: none;
+    }
+    .text-input:focus {
+      border-color: var(--m-primary);
+      box-shadow: 0 0 0 4px rgba(255,46,126,0.1);
     }
 
-    /* Bottom Navigation */
+    .about-card {
+      background: linear-gradient(135deg, rgba(255,46,126,0.1), rgba(0,212,200,0.08));
+      border: 1.5px solid var(--m-primary);
+      border-radius: var(--shape-xl);
+      padding: 18px 20px;
+      margin-bottom: 14px;
+    }
+    .about-card .title {
+      font-family: var(--font-brand);
+      font-size: 14px;
+      letter-spacing: 0.02em;
+      color: var(--m-primary);
+      margin-bottom: 8px;
+    }
+    .about-card p {
+      font-size: 12.5px;
+      line-height: 1.55;
+      color: var(--m-on-surface);
+    }
+
+    /* ==================== BOTTOM NAVIGATION ==================== */
     .bottom-nav {
       position: fixed;
-      bottom: 14px;
+      bottom: 16px;
       left: 50%;
       transform: translateX(-50%);
       width: calc(100% - 32px);
-      max-width: 408px;
-      background: var(--slate);
-      border-radius: 22px;
-      padding: 8px 12px;
+      max-width: 428px;
+      background: var(--cassette-body);
+      border-radius: var(--shape-xxl);
+      padding: 8px;
       display: flex;
       justify-content: space-around;
-      box-shadow: 0 14px 32px rgba(35,39,51,0.28);
+      box-shadow: var(--elev-3);
       z-index: 50;
+      border: 1.5px solid rgba(255,255,255,0.08);
     }
     .nav-btn {
+      flex: 1;
       border: none;
       background: transparent;
-      color: rgba(255,255,255,0.6);
+      color: rgba(242,228,206,0.55);
+      font-family: var(--font-body);
       font-size: 11px;
       font-weight: 600;
-      padding: 6px 12px;
-      border-radius: 14px;
+      padding: 10px 8px;
+      border-radius: var(--shape-full);
       cursor: pointer;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 3px;
+      transition: all 0.2s;
+      letter-spacing: 0.02em;
+    }
+    .nav-btn .nav-icon {
+      font-size: 18px;
+      line-height: 1;
     }
     .nav-btn.active {
-      color: var(--white);
-      background: rgba(255,255,255,0.12);
+      color: var(--m-on-primary);
+      background: var(--m-primary);
+      box-shadow: 0 2px 10px rgba(255,46,126,0.4);
     }
 
+    /* ==================== TOAST ==================== */
     .toast {
       position: fixed;
-      top: 18px;
+      top: 20px;
       left: 50%;
-      transform: translateX(-50%);
-      background: var(--slate);
-      color: white;
-      padding: 10px 18px;
-      border-radius: 999px;
+      transform: translateX(-50%) translateY(-20px);
+      background: var(--cassette-body);
+      color: var(--cassette-label);
+      padding: 12px 20px;
+      border-radius: var(--shape-full);
+      font-family: var(--font-body);
       font-size: 13px;
       font-weight: 500;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.2s;
+      transition: all 0.25s cubic-bezier(.2,.9,.35,1.3);
       z-index: 100;
+      box-shadow: var(--elev-3);
+      border: 1px solid rgba(255,46,126,0.3);
     }
-    .toast.show { opacity: 1; }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 380px) {
+      .reel { width: 64px; height: 64px; flex-basis: 64px; }
+      .timer-digits { font-size: 26px; }
+      .detail-title, .section-title { font-size: 26px; }
+    }
   </style>
 </head>
 <body>
@@ -521,42 +929,94 @@
 
   <div class="app-shell">
     <header>
-      <div class="brand">Voice<span>Noite</span></div>
-      <div class="badge-pt">PT-BR • IA Nativa</div>
+      <div class="brand">
+        <span class="brand-dot"></span>
+        <span class="brand-mark">Voice<em>Noite</em></span>
+      </div>
+      <div class="chip-badge">PT-BR · Lado A</div>
     </header>
 
     <!-- VIEW 1: NOTES & RECORDER -->
     <section id="view-notes" class="view active">
-      <div class="recorder-card">
-        <div class="style-row" id="style-row">
-          <button class="style-pill active" data-style="claro">Claro & Simples</button>
-          <button class="style-pill" data-style="diario">Diário</button>
-          <button class="style-pill" data-style="lista">Lista</button>
-          <button class="style-pill" data-style="blog">Post de Blog</button>
-          <button class="style-pill" data-style="email">E-mail</button>
-          <button class="style-pill" data-style="whatsapp">WhatsApp</button>
-        </div>
 
-        <div class="orange-box">
-          <div class="timer" id="timer">00:00</div>
-          <div class="waveform" id="waveform"></div>
-          <div class="status-hint" id="status-hint">Toque abaixo e fale naturalmente em português</div>
-          <div class="orange-controls">
-            <button class="icon-btn" id="btn-restart" title="Recomeçar" disabled>↺</button>
-            <button class="pause-pill" id="btn-pause" disabled>pausar</button>
-            <button class="icon-btn" id="btn-cancel" title="Cancelar" disabled>✕</button>
+      <div class="cassette-stage">
+        <div class="cassette">
+          <div class="cassette-label">
+            <span class="label-corner tl"></span>
+            <span class="label-corner tr"></span>
+            <div class="label-brand">VoiceNoite</div>
+            <div class="label-sub">Voz Brasileira ★ Estéreo ★ 90 min</div>
+            <div class="style-chips" id="style-row">
+              <button class="chip active" data-style="claro">Claro</button>
+              <button class="chip" data-style="diario">Diário</button>
+              <button class="chip" data-style="lista">Lista</button>
+              <button class="chip" data-style="blog">Blog</button>
+              <button class="chip" data-style="email">E-mail</button>
+              <button class="chip" data-style="whatsapp">WhatsApp</button>
+            </div>
           </div>
-          <div class="live-transcript" id="live-transcript"></div>
+
+          <div class="cassette-window">
+            <div class="reel-row">
+              <div class="reel" id="reel-left">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="50" cy="50" r="46" fill="#1F1A28"/>
+                  <circle cx="50" cy="50" r="40" fill="#2B1810"/>
+                  <g class="hub">
+                    <circle cx="50" cy="50" r="20" fill="#FF2E7E"/>
+                    <rect x="48" y="30" width="4" height="40" fill="#1A1625" rx="1"/>
+                    <rect x="30" y="48" width="40" height="4" fill="#1A1625" rx="1"/>
+                    <rect x="36" y="36" width="4" height="28" fill="#1A1625" rx="1" transform="rotate(45 50 50)"/>
+                    <rect x="36" y="36" width="4" height="28" fill="#1A1625" rx="1" transform="rotate(-45 50 50)"/>
+                    <circle cx="50" cy="50" r="7" fill="#1A1625"/>
+                    <circle cx="50" cy="50" r="3" fill="#FFB800"/>
+                  </g>
+                </svg>
+              </div>
+
+              <div class="center-display">
+                <div class="timer-digits" id="timer">00:00</div>
+                <div class="waveform" id="waveform"></div>
+                <div class="status-pill" id="status-hint">Pronto · toque REC</div>
+              </div>
+
+              <div class="reel" id="reel-right">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="50" cy="50" r="46" fill="#1F1A28"/>
+                  <circle cx="50" cy="50" r="40" fill="#2B1810"/>
+                  <g class="hub">
+                    <circle cx="50" cy="50" r="20" fill="#00D4C8"/>
+                    <rect x="48" y="30" width="4" height="40" fill="#1A1625" rx="1"/>
+                    <rect x="30" y="48" width="40" height="4" fill="#1A1625" rx="1"/>
+                    <rect x="36" y="36" width="4" height="28" fill="#1A1625" rx="1" transform="rotate(45 50 50)"/>
+                    <rect x="36" y="36" width="4" height="28" fill="#1A1625" rx="1" transform="rotate(-45 50 50)"/>
+                    <circle cx="50" cy="50" r="7" fill="#1A1625"/>
+                    <circle cx="50" cy="50" r="3" fill="#FFB800"/>
+                  </g>
+                </svg>
+              </div>
+            </div>
+
+            <div class="live-transcript" id="live-transcript"></div>
+            <div class="tape-strip"></div>
+          </div>
+
+          <div class="cassette-screws">
+            <span></span><span></span><span></span><span></span>
+          </div>
         </div>
 
-        <div class="main-record-wrap">
-          <button class="main-record-btn" id="btn-record" title="Gravar / Concluir">
+        <div class="record-row">
+          <button class="ctrl-btn" id="btn-restart" title="Recomeçar" disabled>↺</button>
+          <button class="record-fab" id="btn-record" title="Gravar / Parar">
             <div class="shape"></div>
+            <button class="pause-pill" id="btn-pause" disabled>pausar</button>
           </button>
+          <button class="ctrl-btn" id="btn-cancel" title="Cancelar" disabled>✕</button>
         </div>
       </div>
 
-      <div class="filter-bar" id="folder-bar">
+      <div class="folder-row" id="folder-bar">
         <button class="folder-tab active" data-folder="Todas">Todas</button>
         <button class="folder-tab" data-folder="Ideias">Ideias</button>
         <button class="folder-tab" data-folder="Diário">Diário</button>
@@ -564,7 +1024,7 @@
         <button class="folder-tab" data-folder="Leitura">Leitura</button>
       </div>
 
-      <input type="search" id="search-input" class="search-input" placeholder="Buscar nas suas notas em português..." />
+      <input type="search" id="search-input" class="search-input" placeholder="Buscar nas suas fitas..." />
 
       <div id="notes-list"></div>
     </section>
@@ -573,44 +1033,38 @@
     <section id="view-detail" class="view">
       <div class="detail-card">
         <div class="detail-top">
-          <button class="icon-btn" style="background:#EFEAE4; color:var(--slate);" id="btn-back">‹</button>
+          <button class="ctrl-btn" id="btn-back" title="Voltar">‹</button>
           <div class="seg-toggle">
             <button class="seg-btn active" id="tab-note">Nota</button>
             <button class="seg-btn" id="tab-transcript">Transcrição</button>
           </div>
-          <button class="icon-btn" style="background:#EFEAE4; color:var(--slate);" id="btn-delete">🗑</button>
+          <button class="ctrl-btn" id="btn-delete" title="Excluir">🗑</button>
         </div>
 
-        <div class="note-date" style="text-align:center;" id="detail-date"></div>
+        <div class="detail-meta" id="detail-date"></div>
         <h1 class="detail-title" id="detail-title"></h1>
-        <div class="tag-row" style="justify-content:center;" id="detail-tags"></div>
+        <div class="detail-tags" id="detail-tags"></div>
         <div class="detail-body" id="detail-body"></div>
 
         <div class="detail-actions">
-          <button class="btn" id="btn-copy-note">Copiar texto</button>
-          <button class="btn btn-primary" id="btn-restyle">Reescrever estilo</button>
+          <button class="btn" id="btn-copy-note">Copiar</button>
+          <button class="btn btn-primary" id="btn-restyle">Reescrever</button>
         </div>
       </div>
     </section>
 
     <!-- VIEW 3: TECLADO / MODO RÁPIDO -->
     <section id="view-keyboard" class="view">
-      <h2 style="font-family:var(--serif); font-size:26px; margin-bottom:6px;">
-        Fale natural. <span style="color:var(--orange); font-style:italic;">Responda melhor.</span>
-      </h2>
-      <p style="font-size:13px; color:var(--slate-muted); margin-bottom:16px;">
-        Grave uma mensagem rápida para colar direto no WhatsApp, E-mail ou Slack.
-      </p>
+      <h2 class="section-title">Fale natural.<br><em>Responda melhor.</em></h2>
+      <p class="section-sub">Grave uma mensagem rápida para colar no WhatsApp, Slack ou e-mail.</p>
 
       <div class="quick-box">
-        <div class="quick-meta">
-          <select id="quick-style" class="select-pill">
-            <option value="whatsapp">Estilo: WhatsApp Natural</option>
-            <option value="claro">Estilo: Claro & Simples</option>
-            <option value="email">Estilo: E-mail Profissional</option>
-            <option value="lista">Estilo: Lista Rápida</option>
-          </select>
-        </div>
+        <select id="quick-style" class="select-pill">
+          <option value="whatsapp">Estilo: WhatsApp Natural</option>
+          <option value="claro">Estilo: Claro & Simples</option>
+          <option value="email">Estilo: E-mail Profissional</option>
+          <option value="lista">Estilo: Lista Rápida</option>
+        </select>
         <textarea id="quick-output" class="quick-output" placeholder="Sua mensagem limpa em português aparecerá aqui..."></textarea>
         <div style="display:flex; gap:10px;">
           <button class="btn btn-primary" id="btn-quick-record">🎙️ Ditar em PT-BR</button>
@@ -621,37 +1075,46 @@
 
     <!-- VIEW 4: CONFIGURAÇÕES -->
     <section id="view-settings" class="view">
-      <h2 style="font-family:var(--serif); font-size:26px; margin-bottom:14px;">Configurações</h2>
+      <h2 class="section-title">Config<em>urações</em></h2>
+
+      <div class="about-card">
+        <div class="title">★ SOBRE ESTA FITA</div>
+        <p>VoiceNoite é um experimento de design e engenharia — uma fita cassete digital para capturar pensamentos em português brasileiro. Seu áudio e notas ficam somente no seu navegador. Com uma chave OpenAI opcional, o áudio é enviado à OpenAI para transcrição (retido até 30 dias por eles).</p>
+      </div>
 
       <div class="settings-card">
-        <label class="field-label">Modo de IA (OpenAI API Key opcional)</label>
-        <p style="font-size:12px; color:var(--slate-muted); margin-bottom:10px; line-height:1.45;">
-          Sem chave: usa reconhecimento nativo do navegador (<code>pt-BR</code>) + limpeza local de vícios de linguagem.<br>
-          Com chave OpenAI: grava áudio real e processa via <strong>Whisper (PT)</strong> + <strong>GPT-4o-mini</strong>.
-        </p>
+        <h3>Modo de IA</h3>
+        <p>Sem chave: usa reconhecimento nativo do navegador (<code>pt-BR</code>) + limpeza local de vícios de linguagem. Com chave OpenAI: grava áudio real e processa via <strong>Whisper (PT)</strong> + <strong>GPT-4o-mini</strong>.</p>
+        <label class="field-label">OpenAI API Key</label>
         <input type="password" id="api-key-input" class="text-input" placeholder="sk-..." />
         <button class="btn btn-primary" style="width:100%;" id="btn-save-key">Salvar chave localmente</button>
       </div>
 
       <div class="settings-card">
-        <label class="field-label">Dialeto e Regras de Limpeza PT-BR</label>
-        <p style="font-size:13px; color:var(--slate-muted); line-height:1.5;">
+        <h3>Dialeto & Limpeza PT-BR</h3>
+        <p>
           • Remove vícios: <em>tipo, né, aí, assim, então, cara, enfim, sabe, tá ligado</em><br>
           • Mantém ortografia e acentuação do Português Brasileiro<br>
           • Evita traduções literais ou tom robótico
         </p>
       </div>
+
+      <div class="settings-card">
+        <h3>Exportar Notas</h3>
+        <p>Suas notas vivem no armazenamento local do navegador. Baixe uma cópia JSON para guardar ou migrar.</p>
+        <button class="btn btn-primary" style="width:100%;" id="btn-export">Baixar fita completa (.json)</button>
+      </div>
     </section>
 
     <nav class="bottom-nav">
-      <button class="nav-btn active" data-view="view-notes">📝<span>Notas</span></button>
-      <button class="nav-btn" data-view="view-keyboard">⌨️<span>Teclado</span></button>
-      <button class="nav-btn" data-view="view-settings">⚙️<span>Config</span></button>
+      <button class="nav-btn active" data-view="view-notes"><span class="nav-icon">◎</span>Fitas</button>
+      <button class="nav-btn" data-view="view-keyboard"><span class="nav-icon">⌨</span>Teclado</button>
+      <button class="nav-btn" data-view="view-settings"><span class="nav-icon">⚙</span>Config</button>
     </nav>
   </div>
 
   <script>
-    // ---------- SEED DATA (100% Brazilian Portuguese) ----------
+    // ---------- SEED DATA (PT-BR) ----------
     const SEED_NOTES = [
       {
         id: '1',
@@ -701,9 +1164,9 @@
       whatsapp: 'WhatsApp'
     };
 
-    // ---------- UI ELEMENTS ----------
+    // Waveform bars
     const waveformEl = document.getElementById('waveform');
-    for (let i = 0; i < 24; i++) {
+    for (let i = 0; i < 16; i++) {
       const bar = document.createElement('div');
       bar.className = 'bar';
       waveformEl.appendChild(bar);
@@ -733,12 +1196,10 @@
       return `${String(d.getDate()).padStart(2,'0')} ${months[d.getMonth()]}, ${d.getFullYear()}`;
     }
 
-    // ---------- PT-BR LOCAL CLEANER (Fallback when no API key) ----------
+    // ---------- PT-BR LOCAL CLEANER ----------
     function cleanPortugueseLocal(raw, style) {
       let text = (raw || '').trim();
       if (!text) return { title: 'Nota sem áudio', content: 'Nenhum texto foi capturado.', tags: ['geral'] };
-
-      // Remove common Brazilian Portuguese spoken fillers
       const fillers = /\b(tipo assim|tipo|né|aí|então|assim|sabe|cara|mano|véi|enfim|bom|olha|tá ligado|quer dizer|na verdade|ééé|hã|aham)\b[,]?/gi;
       text = text.replace(fillers, '').replace(/\s{2,}/g, ' ').replace(/\s+([,.!?])/g, '$1').trim();
       text = text.charAt(0).toUpperCase() + text.slice(1);
@@ -761,14 +1222,13 @@
       return { title, content: text, tags: [style === 'diario' ? 'diário' : 'ideias'] };
     }
 
-    // ---------- OPENAI WHISPER + GPT REWRITER (PT-BR) ----------
+    // ---------- OPENAI WHISPER + GPT ----------
     async function processWithOpenAI(audioBlob, fallbackTranscript, style) {
       const apiKey = localStorage.getItem('voicenoite_openai_key');
       if (!apiKey) return null;
 
       let transcript = fallbackTranscript;
 
-      // 1. Transcribe with Whisper tuned for PT-BR
       if (audioBlob && audioBlob.size > 0) {
         const form = new FormData();
         form.append('file', audioBlob, 'audio.webm');
@@ -789,7 +1249,6 @@
 
       if (!transcript) return null;
 
-      // 2. Rewrite into clean PT-BR
       const styleInstructions = {
         claro: 'Texto claro, fluido e bem estruturado em parágrafos curtos, preservando a voz do autor.',
         diario: 'Entrada de diário reflexiva, íntima e natural em primeira pessoa.',
@@ -831,7 +1290,16 @@ REGRAS:
       return { ...parsed, transcript };
     }
 
-    // ---------- RECORDING LOGIC ----------
+    // ---------- RECORDING ----------
+    function spinReels(on, fast = false) {
+      const l = document.getElementById('reel-left');
+      const r = document.getElementById('reel-right');
+      [l, r].forEach(el => {
+        el.classList.toggle('spinning', on);
+        el.classList.toggle('fast', on && fast);
+      });
+    }
+
     async function startRecording(isQuick = false) {
       quickMode = isQuick;
       liveText = '';
@@ -843,15 +1311,17 @@ REGRAS:
       document.getElementById('timer').textContent = '00:00';
       document.getElementById('btn-record').classList.add('recording');
       document.getElementById('btn-pause').disabled = false;
+      document.getElementById('btn-pause').style.opacity = '1';
+      document.getElementById('btn-pause').style.pointerEvents = 'auto';
       document.getElementById('btn-restart').disabled = false;
       document.getElementById('btn-cancel').disabled = false;
-      document.getElementById('status-hint').textContent = isQuick ? 'Ditando para o modo rápido...' : 'Ouvindo em Português (PT-BR)...';
+      document.getElementById('status-hint').textContent = isQuick ? 'Ditando · modo rápido' : '● REC · Português';
+      spinReels(true, false);
 
       const liveBox = document.getElementById('live-transcript');
       liveBox.textContent = '';
       liveBox.classList.add('visible');
 
-      // Timer & waveform animation
       timerInterval = setInterval(() => {
         if (!isPaused) {
           seconds++;
@@ -861,11 +1331,10 @@ REGRAS:
 
       waveInterval = setInterval(() => {
         bars.forEach(b => {
-          b.style.height = isPaused ? '6px' : `${Math.floor(Math.random() * 28) + 6}px`;
+          b.style.height = isPaused ? '4px' : `${Math.floor(Math.random() * 16) + 4}px`;
         });
       }, 110);
 
-      // Browser Speech Recognition (pt-BR)
       const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (SpeechRec) {
         recognition = new SpeechRec();
@@ -886,14 +1355,13 @@ REGRAS:
         try { recognition.start(); } catch (_) {}
       }
 
-      // MediaRecorder for Whisper
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         mediaRecorder = new MediaRecorder(stream);
         mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
         mediaRecorder.start();
       } catch (err) {
-        showToast('Permita acesso ao microfone para gravar áudio.');
+        showToast('Permita acesso ao microfone para gravar.');
       }
     }
 
@@ -902,14 +1370,19 @@ REGRAS:
       clearInterval(waveInterval);
       isRecording = false;
       isPaused = false;
-      bars.forEach(b => b.style.height = '8px');
-      document.getElementById('btn-record').classList.remove('recording');
-      document.getElementById('btn-pause').disabled = true;
-      document.getElementById('btn-pause').textContent = 'pausar';
+      spinReels(false);
+      bars.forEach(b => b.style.height = '4px');
+      const rec = document.getElementById('btn-record');
+      rec.classList.remove('recording');
+      const pauseBtn = document.getElementById('btn-pause');
+      pauseBtn.disabled = true;
+      pauseBtn.textContent = 'pausar';
+      pauseBtn.style.opacity = '0';
+      pauseBtn.style.pointerEvents = 'none';
       document.getElementById('btn-restart').disabled = true;
       document.getElementById('btn-cancel').disabled = true;
       document.getElementById('live-transcript').classList.remove('visible');
-      document.getElementById('status-hint').textContent = 'Toque abaixo e fale naturalmente em português';
+      document.getElementById('status-hint').textContent = 'Pronto · toque REC';
     }
 
     async function finishRecording(cancel = false) {
@@ -931,7 +1404,8 @@ REGRAS:
       if (cancel) return;
 
       const activeStyle = quickMode ? document.getElementById('quick-style').value : selectedStyle;
-      document.getElementById('status-hint').textContent = 'Lapidando seu texto em português...';
+      document.getElementById('status-hint').textContent = 'Lapidando o texto...';
+      spinReels(true, true);
 
       let result = null;
       try {
@@ -945,7 +1419,8 @@ REGRAS:
         result = { ...local, transcript: capturedText || local.content };
       }
 
-      document.getElementById('status-hint').textContent = 'Toque abaixo e fale naturalmente em português';
+      spinReels(false);
+      document.getElementById('status-hint').textContent = 'Pronto · toque REC';
 
       if (quickMode) {
         document.getElementById('quick-output').value = result.content;
@@ -983,13 +1458,13 @@ REGRAS:
       });
 
       if (!filtered.length) {
-        list.innerHTML = `<p style="text-align:center; color:var(--slate-muted); font-size:13px; padding:24px;">Nenhuma nota encontrada.</p>`;
+        list.innerHTML = `<div class="empty-state"><span class="emoji">📼</span><p>Nenhuma fita aqui ainda.<br>Toque REC para gravar sua primeira.</p></div>`;
         return;
       }
 
       list.innerHTML = filtered.map(n => `
         <div class="note-card" onclick="openDetail('${n.id}')">
-          <div class="note-date">${n.date} • ${n.style}</div>
+          <div class="note-meta">${n.date} · ${n.style}</div>
           <div class="note-title">${n.title}</div>
           <div class="note-preview">${n.content}</div>
           <div class="tag-row">
@@ -1009,11 +1484,10 @@ REGRAS:
     function renderDetail() {
       const n = notes.find(x => x.id === currentNoteId);
       if (!n) return;
-      document.getElementById('detail-date').textContent = `${n.date} • ${n.style}`;
+      document.getElementById('detail-date').textContent = `${n.date} · ${n.style}`;
       document.getElementById('detail-title').textContent = n.title;
       document.getElementById('detail-tags').innerHTML = n.tags.map(t => `<span class="tag-chip">${t}</span>`).join('');
       document.getElementById('detail-body').textContent = detailTab === 'note' ? n.content : (n.transcript || 'Transcrição indisponível.');
-
       document.getElementById('tab-note').classList.toggle('active', detailTab === 'note');
       document.getElementById('tab-transcript').classList.toggle('active', detailTab === 'transcript');
     }
@@ -1027,15 +1501,18 @@ REGRAS:
     }
 
     // ---------- EVENTS ----------
-    document.getElementById('btn-record').addEventListener('click', () => {
+    document.getElementById('btn-record').addEventListener('click', (e) => {
+      if (e.target.id === 'btn-pause') return;
       if (!isRecording) startRecording(false);
       else finishRecording(false);
     });
 
-    document.getElementById('btn-pause').addEventListener('click', () => {
+    document.getElementById('btn-pause').addEventListener('click', (e) => {
+      e.stopPropagation();
       isPaused = !isPaused;
       document.getElementById('btn-pause').textContent = isPaused ? 'retomar' : 'pausar';
       if (mediaRecorder) isPaused ? mediaRecorder.pause() : mediaRecorder.resume();
+      spinReels(isRecording && !isPaused);
     });
 
     document.getElementById('btn-cancel').addEventListener('click', () => finishRecording(true));
@@ -1044,9 +1521,9 @@ REGRAS:
       startRecording(false);
     });
 
-    document.querySelectorAll('.style-pill').forEach(btn => {
+    document.querySelectorAll('.chip').forEach(btn => {
       btn.addEventListener('click', () => {
-        document.querySelectorAll('.style-pill').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.chip').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         selectedStyle = btn.dataset.style;
       });
@@ -1108,7 +1585,7 @@ REGRAS:
       const txt = document.getElementById('quick-output').value;
       if (!txt) return;
       navigator.clipboard.writeText(txt);
-      showToast('Copiado para colar no WhatsApp!');
+      showToast('Copiado!');
     });
 
     // Settings
@@ -1118,6 +1595,19 @@ REGRAS:
       if (val) localStorage.setItem('voicenoite_openai_key', val);
       else localStorage.removeItem('voicenoite_openai_key');
       showToast('Configuração salva!');
+    });
+
+    // Export
+    document.getElementById('btn-export').addEventListener('click', () => {
+      const data = JSON.stringify(notes, null, 2);
+      const blob = new Blob([data], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `voicenoite-${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Fita baixada!');
     });
 
     document.querySelectorAll('.nav-btn').forEach(btn => {
