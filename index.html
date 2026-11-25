@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>VoiceNoite — Grave sua fita de pensamentos</title>
+  <title>VoiceNoite · Grave sua fita de pensamentos</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=Rubik+Mono+One&family=Share+Tech+Mono&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
@@ -674,6 +674,156 @@
       border-top: 1px solid var(--m-outline-variant);
     }
 
+    /* Segmented toggle on its own row (fits 3 tabs on mobile) */
+    .seg-toggle-row {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .seg-toggle-row .seg-btn {
+      padding: 8px 14px;
+      font-size: 12px;
+    }
+
+    /* Inline edit textarea for note content */
+    .detail-edit {
+      width: 100%;
+      min-height: 220px;
+      padding: 14px;
+      border: 1.5px solid var(--m-primary);
+      border-radius: var(--shape-md);
+      font-family: var(--font-display);
+      font-size: 17px;
+      line-height: 1.7;
+      color: var(--m-on-surface);
+      background: var(--m-surface);
+      resize: vertical;
+      outline: none;
+      margin-top: 4px;
+    }
+
+    /* Star button active */
+    .ctrl-btn.starred {
+      background: var(--m-secondary-container);
+      color: var(--cassette-gold);
+      border-color: var(--cassette-gold);
+    }
+
+    /* Action grid: 5 small action buttons wrapping */
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--m-outline-variant);
+    }
+    .action-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      padding: 12px 4px;
+      border: 1.5px solid var(--m-outline-variant);
+      border-radius: var(--shape-md);
+      background: var(--m-surface);
+      color: var(--m-on-surface);
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      letter-spacing: 0.02em;
+    }
+    .action-btn:hover {
+      background: var(--m-surface-container-high);
+      border-color: var(--m-primary);
+    }
+    .action-ico { font-size: 16px; line-height: 1; }
+
+    /* Create menu (appears below action grid when ✨ clicked) */
+    .create-menu {
+      display: none;
+      margin-top: 12px;
+      padding: 8px;
+      background: var(--m-surface-container-high);
+      border-radius: var(--shape-md);
+      border: 1.5px solid var(--m-outline-variant);
+    }
+    .create-menu.open { display: block; animation: viewFadeIn 0.2s ease; }
+    .create-opt {
+      display: block;
+      width: 100%;
+      text-align: left;
+      border: none;
+      background: transparent;
+      padding: 10px 12px;
+      border-radius: var(--shape-xs);
+      font-family: var(--font-body);
+      font-size: 13px;
+      color: var(--m-on-surface);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .create-opt:hover { background: var(--m-primary-container); color: var(--m-on-primary-container); }
+
+    /* Ask AI Modal */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(26,22,37,0.55);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .modal-backdrop.open { display: flex; animation: viewFadeIn 0.2s ease; }
+    .modal-card {
+      background: var(--m-surface);
+      border-radius: var(--shape-xl);
+      padding: 22px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: var(--elev-3);
+      border: 1.5px solid var(--m-outline-variant);
+    }
+    .modal-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .modal-top h3 {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .ask-answer {
+      margin-top: 16px;
+      padding: 14px;
+      background: var(--m-surface-container);
+      border-radius: var(--shape-md);
+      font-size: 14px;
+      line-height: 1.55;
+      min-height: 60px;
+      white-space: pre-wrap;
+      display: none;
+    }
+    .ask-answer.visible { display: block; }
+
+    /* Star icon on note cards */
+    .note-star {
+      position: absolute;
+      top: 14px; right: 14px;
+      color: var(--cassette-gold);
+      font-size: 16px;
+    }
+    .note-card { position: relative; }
+
     .btn {
       flex: 1;
       padding: 14px 16px;
@@ -1001,6 +1151,7 @@
 
       <div class="folder-row" id="folder-bar">
         <button class="folder-tab active" data-folder="Todas">Todas</button>
+        <button class="folder-tab" data-folder="★">★ Favoritas</button>
         <button class="folder-tab" data-folder="Ideias">Ideias</button>
         <button class="folder-tab" data-folder="Diário">Diário</button>
         <button class="folder-tab" data-folder="Trabalho">Trabalho</button>
@@ -1017,24 +1168,68 @@
       <div class="detail-card">
         <div class="detail-top">
           <button class="ctrl-btn" id="btn-back" title="Voltar">‹</button>
+          <div style="display:flex; gap:8px;">
+            <button class="ctrl-btn" id="btn-star" title="Favoritar">☆</button>
+            <button class="ctrl-btn" id="btn-delete" title="Excluir">🗑</button>
+          </div>
+        </div>
+
+        <div class="seg-toggle-row">
           <div class="seg-toggle">
             <button class="seg-btn active" id="tab-note">Nota</button>
-            <button class="seg-btn" id="tab-transcript">Transcrição</button>
+            <button class="seg-btn" id="tab-transcript">Fala</button>
+            <button class="seg-btn" id="tab-summary">Resumo</button>
           </div>
-          <button class="ctrl-btn" id="btn-delete" title="Excluir">🗑</button>
         </div>
 
         <div class="detail-meta" id="detail-date"></div>
         <h1 class="detail-title" id="detail-title"></h1>
         <div class="detail-tags" id="detail-tags"></div>
         <div class="detail-body" id="detail-body"></div>
+        <textarea class="detail-edit" id="detail-edit" style="display:none;"></textarea>
 
-        <div class="detail-actions">
-          <button class="btn" id="btn-copy-note">Copiar</button>
-          <button class="btn btn-primary" id="btn-restyle">Reescrever</button>
+        <div class="action-grid">
+          <button class="action-btn" id="btn-ask">
+            <span class="action-ico">💬</span><span>Pergunte</span>
+          </button>
+          <button class="action-btn" id="btn-create">
+            <span class="action-ico">✨</span><span>Criar</span>
+          </button>
+          <button class="action-btn" id="btn-share">
+            <span class="action-ico">↗</span><span>Compartilhar</span>
+          </button>
+          <button class="action-btn" id="btn-edit">
+            <span class="action-ico">✎</span><span>Editar</span>
+          </button>
+          <button class="action-btn" id="btn-copy-note">
+            <span class="action-ico">⎘</span><span>Copiar</span>
+          </button>
+        </div>
+
+        <!-- Create menu -->
+        <div class="create-menu" id="create-menu">
+          <button class="create-opt" data-kind="tweet">Tweet (280 caracteres)</button>
+          <button class="create-opt" data-kind="thread">Thread no X</button>
+          <button class="create-opt" data-kind="email">E-mail profissional</button>
+          <button class="create-opt" data-kind="linkedin">Post de LinkedIn</button>
+          <button class="create-opt" data-kind="checklist">Lista de ação</button>
+          <button class="create-opt" data-kind="hashtags">Hashtags em PT-BR</button>
         </div>
       </div>
     </section>
+
+    <!-- ASK AI Modal -->
+    <div class="modal-backdrop" id="ask-modal">
+      <div class="modal-card">
+        <div class="modal-top">
+          <h3>Pergunte sobre esta nota</h3>
+          <button class="ctrl-btn" id="btn-ask-close">✕</button>
+        </div>
+        <input type="text" id="ask-input" class="text-input" placeholder="Ex: Quais são os três pontos principais?" />
+        <button class="btn btn-primary" id="btn-ask-send" style="width:100%; margin-top:8px;">Perguntar</button>
+        <div class="ask-answer" id="ask-answer"></div>
+      </div>
+    </div>
 
     <!-- VIEW 3: TECLADO / MODO RÁPIDO -->
     <section id="view-keyboard" class="view">
@@ -1062,7 +1257,7 @@
 
       <div class="about-card">
         <div class="title">★ SOBRE ESTA FITA</div>
-        <p>VoiceNoite é um experimento de design e engenharia — uma fita cassete digital para capturar pensamentos em português brasileiro. Seu áudio e notas ficam somente no seu navegador. Com uma chave OpenAI opcional, o áudio é enviado à OpenAI para transcrição (retido até 30 dias por eles).</p>
+        <p>VoiceNoite é um experimento de design e engenharia: uma fita cassete digital para capturar pensamentos em português brasileiro. Seu áudio e notas ficam somente no seu navegador. Com uma chave OpenAI opcional, o áudio é enviado à OpenAI para transcrição (retido até 30 dias por eles).</p>
       </div>
 
       <div class="settings-card">
@@ -1107,7 +1302,7 @@
         tags: ['hábitos', 'foco'],
         style: 'Claro & Simples',
         transcript: 'Ah, cara, tipo, eu tava na fila do café hoje e percebi que não lembro a última vez que fiquei entediado de verdade, sabe? Qualquer dois minutos livres eu já pego o celular. E aí é justamente nesses momentos, tipo no banho ou dirigindo, que vinham minhas melhores ideias.',
-        content: 'Não me lembro da última vez em que fiquei realmente entediado. Cada pequena brecha do dia é preenchida antes mesmo que eu perceba: o elevador, a fila do café, os trinta segundos antes de uma reunião começar. Uma manchete, uma mensagem, um vídeo que vou esquecer até a hora do almoço.\n\nO curioso é que essas pausas eram justamente o espaço onde meus melhores pensamentos surgiam. No chuveiro, numa viagem longa de carro, esperando um voo atrasado. O tédio nunca foi tempo perdido — era a sala onde minha mente precisava passear para algum lugar que eu não tinha planejado.'
+        content: 'Não me lembro da última vez em que fiquei realmente entediado. Cada pequena brecha do dia é preenchida antes mesmo que eu perceba: o elevador, a fila do café, os trinta segundos antes de uma reunião começar. Uma manchete, uma mensagem, um vídeo que vou esquecer até a hora do almoço.\n\nO curioso é que essas pausas eram justamente o espaço onde meus melhores pensamentos surgiam. No chuveiro, numa viagem longa de carro, esperando um voo atrasado. O tédio nunca foi tempo perdido: era a sala onde minha mente precisava passear para algum lugar que eu não tinha planejado.'
       },
       {
         id: '2',
@@ -1129,6 +1324,7 @@
     let detailTab = 'note';
     let isRecording = false;
     let isPaused = false;
+    let isEditing = false;
     let seconds = 0;
     let timerInterval = null;
     let waveInterval = null;
@@ -1247,6 +1443,8 @@ REGRAS:
 - Use estritamente Português do Brasil natural (nunca português europeu, nunca tradução literal).
 - Remova vícios de oralidade (tipo, né, aí, então, assim, cara, enfim, sabe, gaguejos e repetições).
 - Preserve fielmente as ideias, fatos e personalidade de quem falou.
+- NUNCA use travessões (— ou –). Em vez disso use dois-pontos, vírgulas, pontos ou parênteses.
+- Evite construções tipicamente "de IA" (abertura "No mundo de hoje", encerramento com "Em resumo").
 - Estilo solicitado: ${styleInstructions[style] || styleInstructions.claro}
 - Responda APENAS em JSON válido no formato:
 {"title": "Título curto e marcante", "content": "Texto reescrito", "tags": ["tag1", "tag2"]}`;
@@ -1394,7 +1592,7 @@ REGRAS:
       try {
         result = await processWithOpenAI(audioBlob, capturedText, activeStyle);
       } catch (e) {
-        showToast('Erro na OpenAI — usando limpeza local PT-BR.');
+        showToast('Erro na OpenAI. Usando limpeza local PT-BR.');
       }
 
       if (!result) {
@@ -1435,7 +1633,10 @@ REGRAS:
       const list = document.getElementById('notes-list');
 
       const filtered = notes.filter(n => {
-        const matchFolder = selectedFolder === 'Todas' || n.folder === selectedFolder;
+        let matchFolder;
+        if (selectedFolder === 'Todas') matchFolder = true;
+        else if (selectedFolder === '★') matchFolder = !!n.starred;
+        else matchFolder = n.folder === selectedFolder;
         const matchQuery = !q || n.title.toLowerCase().includes(q) || n.content.toLowerCase().includes(q);
         return matchFolder && matchQuery;
       });
@@ -1447,6 +1648,7 @@ REGRAS:
 
       list.innerHTML = filtered.map(n => `
         <div class="note-card" onclick="openDetail('${n.id}')">
+          ${n.starred ? '<span class="note-star">★</span>' : ''}
           <div class="note-meta">${n.date} · ${n.style}</div>
           <div class="note-title">${n.title}</div>
           <div class="note-preview">${n.content}</div>
@@ -1460,19 +1662,135 @@ REGRAS:
     function openDetail(id) {
       currentNoteId = id;
       detailTab = 'note';
+      isEditing = false;
+      document.getElementById('create-menu').classList.remove('open');
       renderDetail();
       switchView('view-detail');
     }
 
-    function renderDetail() {
+    async function renderDetail() {
       const n = notes.find(x => x.id === currentNoteId);
       if (!n) return;
       document.getElementById('detail-date').textContent = `${n.date} · ${n.style}`;
       document.getElementById('detail-title').textContent = n.title;
       document.getElementById('detail-tags').innerHTML = n.tags.map(t => `<span class="tag-chip">${t}</span>`).join('');
-      document.getElementById('detail-body').textContent = detailTab === 'note' ? n.content : (n.transcript || 'Transcrição indisponível.');
+      document.getElementById('btn-star').textContent = n.starred ? '★' : '☆';
+      document.getElementById('btn-star').classList.toggle('starred', !!n.starred);
       document.getElementById('tab-note').classList.toggle('active', detailTab === 'note');
       document.getElementById('tab-transcript').classList.toggle('active', detailTab === 'transcript');
+      document.getElementById('tab-summary').classList.toggle('active', detailTab === 'summary');
+
+      const bodyEl = document.getElementById('detail-body');
+      const editEl = document.getElementById('detail-edit');
+
+      if (isEditing && detailTab === 'note') {
+        bodyEl.style.display = 'none';
+        editEl.style.display = 'block';
+        editEl.value = n.content;
+        return;
+      }
+      editEl.style.display = 'none';
+      bodyEl.style.display = 'block';
+
+      if (detailTab === 'note') {
+        bodyEl.textContent = n.content;
+      } else if (detailTab === 'transcript') {
+        bodyEl.textContent = n.transcript || 'Transcrição indisponível.';
+      } else if (detailTab === 'summary') {
+        if (n.summary) {
+          bodyEl.textContent = n.summary;
+        } else {
+          bodyEl.textContent = 'Gerando resumo...';
+          const summary = await generateSummary(n);
+          n.summary = summary;
+          saveNotes();
+          if (detailTab === 'summary' && currentNoteId === n.id) {
+            bodyEl.textContent = summary;
+          }
+        }
+      }
+    }
+
+    // ---------- SUMMARY / ASK / CREATE (OpenAI or local fallback) ----------
+    async function callGPT(systemPrompt, userContent) {
+      const apiKey = localStorage.getItem('voicenoite_openai_key');
+      if (!apiKey) return null;
+      try {
+        const res = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
+          body: JSON.stringify({
+            model: 'gpt-4o-mini',
+            messages: [
+              { role: 'system', content: systemPrompt },
+              { role: 'user', content: userContent }
+            ]
+          })
+        });
+        if (!res.ok) return null;
+        const data = await res.json();
+        return data.choices[0].message.content.trim();
+      } catch (e) { return null; }
+    }
+
+    async function generateSummary(note) {
+      const source = note.content || note.transcript || '';
+      if (!source) return 'Sem conteúdo para resumir.';
+      const sys = 'Resuma a nota a seguir em 3 a 5 marcadores (•) em português brasileiro. Capture as ideias centrais. NUNCA use travessões. Responda somente com os bullets, sem introdução.';
+      const gpt = await callGPT(sys, source);
+      if (gpt) return gpt;
+      const sentences = source.split(/[.!?]+/).map(s => s.trim()).filter(s => s.length > 15);
+      return sentences.slice(0, 4).map(s => `• ${s}.`).join('\n');
+    }
+
+    const CREATE_PROMPTS = {
+      tweet: 'Transforme a nota em um único tweet em português brasileiro, no máximo 280 caracteres, direto e com personalidade. Sem hashtags, sem travessões.',
+      thread: 'Transforme a nota em uma thread de 3 a 5 tweets em português brasileiro, numerados 1/, 2/, etc. Cada tweet com até 280 caracteres. Sem travessões.',
+      email: 'Transforme a nota em um e-mail profissional brasileiro: saudação cordial, 2 ou 3 parágrafos curtos, assinatura sem nome. Sem travessões.',
+      linkedin: 'Transforme a nota em um post de LinkedIn em português brasileiro: abertura que prende, 3 a 5 parágrafos curtos, fechamento com pergunta aberta. Sem hashtags no corpo. Sem travessões.',
+      checklist: 'Transforme a nota em uma lista de ação em português brasileiro. Cada item começa com verbo no infinitivo e tem checkbox [ ] no início. Sem travessões.',
+      hashtags: 'Gere 8 a 12 hashtags brasileiras relevantes para a nota, uma por linha, começando com #. Sem explicações.'
+    };
+
+    async function createDerivative(kind) {
+      const n = notes.find(x => x.id === currentNoteId);
+      if (!n) return;
+      showToast('Gerando...');
+      const sys = CREATE_PROMPTS[kind] || CREATE_PROMPTS.tweet;
+      const result = await callGPT(sys, n.content || n.transcript || '');
+      if (!result) {
+        showToast('Precisa de chave OpenAI em Config.');
+        return;
+      }
+      try { await navigator.clipboard.writeText(result); } catch (_) {}
+      const win = window.open('', '_blank');
+      if (win) {
+        win.document.write(`<title>VoiceNoite · ${kind}</title><style>body{font-family:system-ui;padding:28px;max-width:640px;margin:auto;white-space:pre-wrap;line-height:1.55}</style>${result.replace(/</g,'&lt;')}`);
+      } else {
+        showToast('Copiado para a área de transferência!');
+      }
+    }
+
+    async function askAboutNote(question) {
+      const n = notes.find(x => x.id === currentNoteId);
+      if (!n) return 'Nota não encontrada.';
+      const apiKey = localStorage.getItem('voicenoite_openai_key');
+      if (!apiKey) return 'Para perguntar sobre a nota, adicione sua chave OpenAI em Config.';
+      const sys = `Você responde perguntas sobre a nota de voz a seguir, em português brasileiro, de forma curta e direta. Use apenas o que está na nota. NUNCA use travessões.\n\nNOTA:\n${n.content}\n\nTRANSCRIÇÃO ORIGINAL:\n${n.transcript || '(sem transcrição)'}`;
+      const answer = await callGPT(sys, question);
+      return answer || 'Não consegui responder agora.';
+    }
+
+    function shareNote() {
+      const n = notes.find(x => x.id === currentNoteId);
+      if (!n) return;
+      const text = `${n.title}\n\n${n.content}\n\nFeito com VoiceNoite · tropicgirlie.github.io/voicenoite`;
+      if (navigator.share) {
+        navigator.share({ title: n.title, text }).catch(() => {});
+      } else {
+        navigator.clipboard.writeText(text);
+        showToast('Copiado para compartilhar!');
+      }
     }
 
     function switchView(viewId) {
@@ -1522,9 +1840,14 @@ REGRAS:
     });
 
     document.getElementById('search-input').addEventListener('input', renderNotes);
-    document.getElementById('btn-back').addEventListener('click', () => switchView('view-notes'));
+    document.getElementById('btn-back').addEventListener('click', () => {
+      isEditing = false;
+      document.getElementById('create-menu').classList.remove('open');
+      switchView('view-notes');
+    });
     document.getElementById('tab-note').addEventListener('click', () => { detailTab = 'note'; renderDetail(); });
     document.getElementById('tab-transcript').addEventListener('click', () => { detailTab = 'transcript'; renderDetail(); });
+    document.getElementById('tab-summary').addEventListener('click', () => { detailTab = 'summary'; renderDetail(); });
 
     document.getElementById('btn-copy-note').addEventListener('click', () => {
       const n = notes.find(x => x.id === currentNoteId);
@@ -1534,6 +1857,7 @@ REGRAS:
     });
 
     document.getElementById('btn-delete').addEventListener('click', () => {
+      if (!confirm('Excluir esta nota? Essa ação não pode ser desfeita.')) return;
       notes = notes.filter(x => x.id !== currentNoteId);
       saveNotes();
       renderNotes();
@@ -1541,15 +1865,73 @@ REGRAS:
       showToast('Nota excluída');
     });
 
-    document.getElementById('btn-restyle').addEventListener('click', () => {
+    document.getElementById('btn-star').addEventListener('click', () => {
       const n = notes.find(x => x.id === currentNoteId);
       if (!n) return;
-      const cleaned = cleanPortugueseLocal(n.transcript || n.content, 'lista');
-      n.content = cleaned.content;
-      n.style = 'Lista';
+      n.starred = !n.starred;
       saveNotes();
       renderDetail();
-      showToast('Convertida em lista!');
+      renderNotes();
+      showToast(n.starred ? 'Favoritada' : 'Removida das favoritas');
+    });
+
+    document.getElementById('btn-share').addEventListener('click', shareNote);
+
+    document.getElementById('btn-edit').addEventListener('click', () => {
+      if (detailTab !== 'note') {
+        detailTab = 'note';
+      }
+      if (isEditing) {
+        const n = notes.find(x => x.id === currentNoteId);
+        if (n) {
+          n.content = document.getElementById('detail-edit').value;
+          n.summary = null;
+          saveNotes();
+          showToast('Nota salva!');
+        }
+        isEditing = false;
+      } else {
+        isEditing = true;
+      }
+      renderDetail();
+    });
+
+    document.getElementById('btn-create').addEventListener('click', () => {
+      document.getElementById('create-menu').classList.toggle('open');
+    });
+
+    document.querySelectorAll('.create-opt').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        document.getElementById('create-menu').classList.remove('open');
+        await createDerivative(btn.dataset.kind);
+      });
+    });
+
+    // Ask AI modal
+    document.getElementById('btn-ask').addEventListener('click', () => {
+      document.getElementById('ask-input').value = '';
+      document.getElementById('ask-answer').textContent = '';
+      document.getElementById('ask-answer').classList.remove('visible');
+      document.getElementById('ask-modal').classList.add('open');
+      setTimeout(() => document.getElementById('ask-input').focus(), 50);
+    });
+    document.getElementById('btn-ask-close').addEventListener('click', () => {
+      document.getElementById('ask-modal').classList.remove('open');
+    });
+    document.getElementById('ask-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'ask-modal') document.getElementById('ask-modal').classList.remove('open');
+    });
+    document.getElementById('btn-ask-send').addEventListener('click', async () => {
+      const q = document.getElementById('ask-input').value.trim();
+      if (!q) return;
+      const ans = document.getElementById('ask-answer');
+      ans.classList.add('visible');
+      ans.textContent = 'Pensando...';
+      const result = await askAboutNote(q);
+      ans.textContent = result;
+    });
+    document.getElementById('ask-input').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') document.getElementById('btn-ask-send').click();
     });
 
     // Quick / Keyboard Mode

@@ -17,6 +17,19 @@ The step that makes it usable by people who don't have an OpenAI account.
 - [ ] Rate-limit `/api/process-audio` by IP (Upstash Redis or Vercel KV) so one anonymous user can't drain the key
 - [ ] Add a usage cap for anonymous users (e.g. 3 recordings per day per IP)
 
+## Phase 1.5 — Audio & richer notes (needs IndexedDB or Supabase Storage)
+
+Features inspired by Voicenotes.com. Each one needs real file storage (localStorage can't hold audio blobs), so they land after Phase 1.
+
+- [ ] Store recorded audio in IndexedDB (or Supabase Storage in Phase 2)
+- [ ] Playback on each note card (▶ button + duration display)
+- [ ] Attach images or PDFs to a note
+- [ ] Record subnote (append a second recording to an existing note)
+- [ ] Mark note type: Meeting, Idea, Journal, Task (visual label)
+- [ ] Semantic search across notes (OpenAI embeddings cached per note)
+- [ ] Calendar / timeline view (group by day, week, month)
+- [ ] Shared notes (public read-only link, or shared with another VoiceNoite user — this one needs Phase 2 accounts)
+
 ## Phase 2 — Accounts & sync
 
 The step that unlocks cross-device use and makes people want to keep notes long-term.
