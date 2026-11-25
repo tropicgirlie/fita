@@ -1318,6 +1318,18 @@
 
     // ---------- STATE ----------
     let notes = JSON.parse(localStorage.getItem('voicenoite_notes') || 'null') || SEED_NOTES;
+
+    // One-time migration: strip em dashes from existing notes
+    if (!localStorage.getItem('voicenoite_migrated_dashes')) {
+      notes = notes.map(n => ({
+        ...n,
+        content: (n.content || '').replace(/\s—\s/g, '. ').replace(/—/g, ':'),
+        transcript: (n.transcript || '').replace(/\s—\s/g, '. ').replace(/—/g, ':')
+      }));
+      localStorage.setItem('voicenoite_notes', JSON.stringify(notes));
+      localStorage.setItem('voicenoite_migrated_dashes', '1');
+    }
+
     let selectedStyle = 'claro';
     let selectedFolder = 'Todas';
     let currentNoteId = null;
