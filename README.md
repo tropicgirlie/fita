@@ -1,41 +1,45 @@
-# VoiceNoite
+# Fita
 
-App de notas por voz em Português do Brasil (`pt-BR`) inspirado no AudioPen.
-Grave pensamentos naturalmente e transforme em notas limpas, listas, diário, posts de blog, e-mails ou mensagens de WhatsApp.
+A voice-note app shaped like a cassette tape. Speak naturally, get clean writing back. Works in Brazilian Portuguese (`pt-BR`) and multicultural English.
 
-## Recursos
+*Fita* is Portuguese for cassette tape.
 
-- Reconhecimento de voz nativo em `pt-BR` + suporte a **OpenAI Whisper (`pt`) + GPT-4o-mini**
-- Limpeza automática de vícios de oralidade (*tipo, né, aí, então, assim, cara, enfim*)
-- Alternância **Nota | Transcrição**
-- Estilos: Claro & Simples, Diário, Lista, Post de Blog, E-mail e WhatsApp
-- Modo Teclado / Resposta Rápida para colar direto no WhatsApp, Slack ou e-mail
-- Armazenamento local no navegador (nenhuma nota sai do seu dispositivo sem OpenAI opcional)
+## Features
 
-## Como rodar
+- Switch between **Brazilian Portuguese** and **English (multicultural)** from the header or Settings
+- Native browser speech recognition + optional **OpenAI Whisper + GPT-4o-mini** (bring your own key)
+- Removes fillers without flattening the speaker's voice
+  - PT-BR: *tipo, né, aí, então, assim, cara, enfim, sabe, tá ligado*
+  - EN: *um, uh, like, you know, kind of, basically, I mean, sort of* — while preserving non-native phrasing and personality
+- Three views per note: cleaned **Note**, raw **Spoken** transcript, bullet **Summary**
+- One-tap derivatives: tweet, X thread, professional email, LinkedIn post, action checklist, hashtags
+- Ask AI questions about a note
+- Edit, star, share, copy, delete
+- Rewrite styles: Clear & Simple, Journal, List, Blog Post, Email, Chat
+- Local-first: notes live in your browser, exportable as JSON
+- Brand rule: never uses em dashes (no AI slop)
 
-### Opção A — Uso imediato (estático)
+## How to run
 
-Abra `index.html` em Chrome, Edge ou Safari. HTTPS ou `localhost` são obrigatórios para acessar o microfone.
+### Option A — Static (now)
 
-Para publicar no GitHub Pages:
+Open `index.html` in Chrome, Edge or Safari. HTTPS or `localhost` is required for microphone access.
 
-1. Suba este repositório para o GitHub.
-2. Em **Settings → Pages → Build and deployment**, escolha branch `main` e pasta `/root`.
-3. Em ~1 minuto o app estará em `https://<seu-usuario>.github.io/voicenoite/`.
+To publish on GitHub Pages:
 
-### Opção B — Próximo passo: Next.js + OpenAI no servidor
+1. Push this repo to GitHub.
+2. In **Settings → Pages → Build and deployment**, pick branch `main`, folder `/root`.
+3. In about a minute the app is live at `https://<your-user>.github.io/fita/`.
 
-A rota `backend/process-audio.ts` é um endpoint pronto para Next.js (App Router) que faz:
+### Option B — Next.js with OpenAI on the server
 
-1. Transcrição com Whisper ajustado para PT-BR (`language: 'pt'` + prompt brasileiro).
-2. Reescrita com GPT-4o-mini usando um prompt que remove vícios de oralidade e evita português europeu.
+`backend/process-audio.ts` is a drop-in Next.js App Router endpoint that does:
 
-Para usar, mova para `app/api/process-audio/route.ts` em um projeto Next.js, defina `OPENAI_API_KEY` no `.env.local` e faça o front-end enviar o `audio` via `FormData`.
+1. Transcription with Whisper (language set per request — `pt` or `en`).
+2. Rewrite with GPT-4o-mini using language-specific prompts (clean oralidade in PT-BR; preserve multicultural voice in EN).
 
-## Próximos passos (roadmap)
+Move it to `app/api/process-audio/route.ts` in a Next.js project, set `OPENAI_API_KEY` in `.env.local`, and have the frontend POST `audio` as `FormData`.
 
-- [ ] App Next.js com backend seguro (chave OpenAI no servidor)
-- [ ] Sync entre dispositivos via Supabase
-- [ ] App iOS nativo + Apple Watch (SwiftUI + WatchConnectivity)
-- [ ] Extensão de teclado iOS para ditar direto em qualquer app
+## Roadmap
+
+See [BACKLOG.md](BACKLOG.md) for the full phased plan (Hosted MVP → Accounts → Billing → Brazilian-market essentials → Growth → B2B wedge).

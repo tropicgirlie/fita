@@ -1,4 +1,4 @@
-# Backlog — VoiceNoite → Business
+# Backlog — Fita → Business
 
 What's here today: a static, single-file prototype. Users bring their own OpenAI key.
 What's below: the realistic path to a paying product. Scoped in phases so each phase ships on its own and generates signal before investing in the next.
@@ -13,7 +13,7 @@ The step that makes it usable by people who don't have an OpenAI account.
 - [ ] Port the current `index.html` UI into `app/page.tsx` as React components
 - [ ] Wire up `app/api/process-audio/route.ts` (code already drafted in [backend/process-audio.ts](backend/process-audio.ts))
 - [ ] Move `OPENAI_API_KEY` to Vercel env var — never ships to browser
-- [ ] Deploy to Vercel (`vercel --prod`), point `voicenoite.com.br` at it if the domain's available
+- [ ] Deploy to Vercel (`vercel --prod`), point `fita.com.br` (or `usefita.com`) at it if the domain's available
 - [ ] Rate-limit `/api/process-audio` by IP (Upstash Redis or Vercel KV) so one anonymous user can't drain the key
 - [ ] Add a usage cap for anonymous users (e.g. 3 recordings per day per IP)
 
@@ -28,7 +28,7 @@ Features inspired by Voicenotes.com. Each one needs real file storage (localStor
 - [ ] Mark note type: Meeting, Idea, Journal, Task (visual label)
 - [ ] Semantic search across notes (OpenAI embeddings cached per note)
 - [ ] Calendar / timeline view (group by day, week, month)
-- [ ] Shared notes (public read-only link, or shared with another VoiceNoite user — this one needs Phase 2 accounts)
+- [ ] Shared notes (public read-only link, or shared with another Fita user. This one needs Phase 2 accounts)
 
 ## Phase 2 — Accounts & sync
 

@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" id="html-root">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>VoiceNoite · Grave sua fita de pensamentos</title>
+  <title id="page-title">Fita · Grave sua fita de pensamentos</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=Rubik+Mono+One&family=Share+Tech+Mono&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
   <style>
     /* ==========================================================
-       VoiceNoite — Material 3 Expressive · Cassette Funk Edition
+       Fita — Material 3 Expressive · Cassette Funk Edition
        ========================================================== */
     :root {
       /* Material 3 Expressive color tokens — funk palette */
@@ -139,6 +139,17 @@
       text-transform: uppercase;
       font-weight: 500;
     }
+    .lang-toggle {
+      cursor: pointer;
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+    .lang-toggle:hover {
+      transform: translateY(-1px);
+      background: var(--m-primary-container);
+      color: var(--m-on-primary-container);
+      border-color: var(--m-primary);
+    }
+    .lang-toggle:active { transform: translateY(0); }
 
     /* ==================== VIEW CONTAINERS ==================== */
     .view { display: none; padding: 0 20px; flex: 1; }
@@ -1051,6 +1062,37 @@
       transform: translateX(-50%) translateY(0);
     }
 
+    /* Language picker */
+    .lang-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .lang-opt {
+      padding: 14px 12px;
+      border-radius: var(--shape-md);
+      border: 1.5px solid var(--m-outline-variant);
+      background: var(--m-surface);
+      color: var(--m-on-surface);
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: left;
+    }
+    .lang-opt:hover {
+      border-color: var(--m-primary);
+      background: var(--m-primary-container);
+    }
+    .lang-opt.active {
+      border-color: var(--m-primary);
+      background: var(--m-primary-container);
+      color: var(--m-on-primary-container);
+      box-shadow: var(--elev-1);
+    }
+
     @media (max-width: 380px) {
       .reel { width: 64px; height: 64px; flex-basis: 64px; }
       .timer-digits { font-size: 26px; }
@@ -1065,9 +1107,9 @@
     <header>
       <div class="brand">
         <span class="brand-dot"></span>
-        <span class="brand-mark">Voice<em>Noite</em></span>
+        <span class="brand-mark">Fi<em>ta</em></span>
       </div>
-      <div class="chip-badge">PT-BR · Lado A</div>
+      <button class="chip-badge lang-toggle" id="lang-toggle" title="Switch language">PT-BR · Lado A</button>
     </header>
 
     <!-- VIEW 1: NOTES & RECORDER -->
@@ -1078,7 +1120,7 @@
           <div class="cassette-label">
             <span class="label-corner tl"></span>
             <span class="label-corner tr"></span>
-            <div class="label-brand">VoiceNoite</div>
+            <div class="label-brand">FITA</div>
             <div class="label-sub">Voz Brasileira ★ Estéreo ★ 90 min</div>
             <div class="style-chips" id="style-row">
               <button class="chip active" data-style="claro">Claro</button>
@@ -1258,18 +1300,31 @@
 
       <div class="about-card">
         <div class="title">★ SOBRE ESTA FITA</div>
-        <p>VoiceNoite é um experimento de design e engenharia: uma fita cassete digital para capturar pensamentos em português brasileiro. Seu áudio e notas ficam somente no seu navegador. Com uma chave OpenAI opcional, o áudio é enviado à OpenAI para transcrição (retido até 30 dias por eles).</p>
+        <p>Fita é um experimento de design e engenharia: uma fita cassete digital para capturar pensamentos em português brasileiro. Seu áudio e notas ficam somente no seu navegador. Com uma chave OpenAI opcional, o áudio é enviado à OpenAI para transcrição (retido até 30 dias por eles).</p>
       </div>
 
-      <div class="settings-card">
+      <div class="settings-card" id="lang-card">
+        <h3>Idioma</h3>
+        <p>Escolha o idioma de reconhecimento de voz, da interface e das reescritas da IA.</p>
+        <div class="lang-grid">
+          <button class="lang-opt" id="lang-opt-pt" data-lang="pt-BR">
+            <span class="lang-opt-label">🇧🇷 Português brasileiro</span>
+          </button>
+          <button class="lang-opt" id="lang-opt-en" data-lang="en">
+            <span class="lang-opt-label">🇬🇧 English (multicultural)</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="settings-card" id="ai-card">
         <h3>Modo de IA</h3>
-        <p>Sem chave: usa reconhecimento nativo do navegador (<code>pt-BR</code>) + limpeza local de vícios de linguagem. Com chave OpenAI: grava áudio real e processa via <strong>Whisper (PT)</strong> + <strong>GPT-4o-mini</strong>.</p>
+        <p class="ai-body">Sem chave: usa reconhecimento nativo do navegador + limpeza local. Com chave OpenAI: grava áudio real e processa via <strong>Whisper</strong> + <strong>GPT-4o-mini</strong>.</p>
         <label class="field-label">OpenAI API Key</label>
         <input type="password" id="api-key-input" class="text-input" placeholder="sk-..." />
         <button class="btn btn-primary" style="width:100%;" id="btn-save-key">Salvar chave localmente</button>
       </div>
 
-      <div class="settings-card">
+      <div class="settings-card" id="dialect-card">
         <h3>Dialeto & Limpeza PT-BR</h3>
         <p>
           • Remove vícios: <em>tipo, né, aí, assim, então, cara, enfim, sabe, tá ligado</em><br>
@@ -1278,7 +1333,7 @@
         </p>
       </div>
 
-      <div class="settings-card">
+      <div class="settings-card" id="export-card">
         <h3>Exportar Notas</h3>
         <p>Suas notas vivem no armazenamento local do navegador. Baixe uma cópia JSON para guardar ou migrar.</p>
         <button class="btn btn-primary" style="width:100%;" id="btn-export">Baixar fita completa (.json)</button>
@@ -1293,29 +1348,204 @@
   </div>
 
   <script>
-    // ---------- SEED DATA (PT-BR) ----------
-    const SEED_NOTES = [
-      {
-        id: '1',
-        date: '11 OUT, 2026',
-        title: 'Em defesa do tédio',
-        folder: 'Diário',
-        tags: ['hábitos', 'foco'],
-        style: 'Claro & Simples',
-        transcript: 'Ah, cara, tipo, eu tava na fila do café hoje e percebi que não lembro a última vez que fiquei entediado de verdade, sabe? Qualquer dois minutos livres eu já pego o celular. E aí é justamente nesses momentos, tipo no banho ou dirigindo, que vinham minhas melhores ideias.',
-        content: 'Não me lembro da última vez em que fiquei realmente entediado. Cada pequena brecha do dia é preenchida antes mesmo que eu perceba: o elevador, a fila do café, os trinta segundos antes de uma reunião começar. Uma manchete, uma mensagem, um vídeo que vou esquecer até a hora do almoço.\n\nO curioso é que essas pausas eram justamente o espaço onde meus melhores pensamentos surgiam. No chuveiro, numa viagem longa de carro, esperando um voo atrasado. O tédio nunca foi tempo perdido: era a sala onde minha mente precisava passear para algum lugar que eu não tinha planejado.'
+    // ---------- I18N ----------
+    const I18N = {
+      'pt-BR': {
+        pageTitle: 'Fita · Grave sua fita de pensamentos',
+        langBadge: 'PT-BR · Lado A',
+        labelSub: 'Voz Brasileira ★ Estéreo ★ 90 min',
+        chipClaro: 'Claro', chipDiario: 'Diário', chipLista: 'Lista', chipBlog: 'Blog', chipEmail: 'E-mail', chipWhats: 'WhatsApp',
+        titleRestart: 'Recomeçar', titleRecord: 'Gravar / Parar', titleCancel: 'Cancelar',
+        pausePause: 'pausar', pauseResume: 'retomar',
+        titleBack: 'Voltar', titleStar: 'Favoritar', titleDelete: 'Excluir',
+        folderAll: 'Todas', folderStarred: '★ Favoritas', folderIdeas: 'Ideias', folderJournal: 'Diário', folderWork: 'Trabalho', folderReading: 'Leitura',
+        searchPh: 'Buscar nas suas fitas...',
+        tabNote: 'Nota', tabTranscript: 'Fala', tabSummary: 'Resumo',
+        actionAsk: 'Pergunte', actionCreate: 'Criar', actionShare: 'Compartilhar', actionEdit: 'Editar', actionCopy: 'Copiar',
+        createTweet: 'Tweet (280 caracteres)', createThread: 'Thread no X', createEmail: 'E-mail profissional', createLinkedin: 'Post de LinkedIn', createChecklist: 'Lista de ação', createHashtags: 'Hashtags em PT-BR',
+        askTitle: 'Pergunte sobre esta nota', askPh: 'Ex: Quais são os três pontos principais?', askSend: 'Perguntar', askThinking: 'Pensando...',
+        keyboardTitle1: 'Fale natural.', keyboardTitle2: 'Responda melhor.',
+        keyboardSub: 'Grave uma mensagem rápida para colar no WhatsApp, Slack ou e-mail.',
+        quickWhats: 'Estilo: WhatsApp Natural', quickClear: 'Estilo: Claro & Simples', quickEmail: 'Estilo: E-mail Profissional', quickList: 'Estilo: Lista Rápida',
+        quickOutPh: 'Sua mensagem limpa em português aparecerá aqui...',
+        quickRecord: '🎙️ Ditar em PT-BR', quickStop: '⏹️ Parar e Limpar', quickCopy: 'Copiar',
+        settingsTitle1: 'Config', settingsTitle2: 'urações',
+        aboutTitle: '★ SOBRE ESTA FITA',
+        aboutBody: 'Fita é um experimento de design e engenharia: uma fita cassete digital para capturar pensamentos em português brasileiro. Seu áudio e notas ficam somente no seu navegador. Com uma chave OpenAI opcional, o áudio é enviado à OpenAI para transcrição (retido até 30 dias por eles).',
+        langSectionTitle: 'Idioma',
+        langSectionBody: 'Escolha o idioma de reconhecimento de voz, da interface e das reescritas da IA.',
+        langPTLabel: '🇧🇷 Português brasileiro', langENLabel: '🇬🇧 English (multicultural)',
+        aiTitle: 'Modo de IA',
+        aiBody: 'Sem chave: usa reconhecimento nativo do navegador + limpeza local. Com chave OpenAI: grava áudio real e processa via <strong>Whisper</strong> + <strong>GPT-4o-mini</strong>.',
+        apiKeyLabel: 'OpenAI API Key',
+        apiSave: 'Salvar chave localmente',
+        dialectTitle: 'Dialeto & Limpeza PT-BR',
+        dialectBody: '• Remove vícios: <em>tipo, né, aí, assim, então, cara, enfim, sabe, tá ligado</em><br>• Mantém ortografia e acentuação do Português Brasileiro<br>• Evita traduções literais ou tom robótico',
+        exportTitle: 'Exportar Notas',
+        exportBody: 'Suas notas vivem no armazenamento local do navegador. Baixe uma cópia JSON para guardar ou migrar.',
+        exportBtn: 'Baixar fita completa (.json)',
+        navTapes: 'Fitas', navKeyboard: 'Teclado', navSettings: 'Config',
+        // Dynamic strings
+        statusReady: 'Pronto · toque REC',
+        statusRecording: '● REC · Português',
+        statusDictating: 'Ditando · modo rápido',
+        statusPolishing: 'Lapidando o texto...',
+        statusListening: 'Ouvindo...',
+        emptyState: 'Nenhuma fita aqui ainda.<br>Toque REC para gravar sua primeira.',
+        transcriptUnavailable: 'Transcrição indisponível.',
+        summaryGenerating: 'Gerando resumo...',
+        summaryEmpty: 'Sem conteúdo para resumir.',
+        toastQuickReady: 'Mensagem pronta para colar!',
+        toastNoteCopied: 'Nota copiada!',
+        toastCopied: 'Copiado!',
+        toastCopiedShare: 'Copiado para compartilhar!',
+        toastCopiedClipboard: 'Copiado para a área de transferência!',
+        toastStarred: 'Favoritada', toastUnstarred: 'Removida das favoritas',
+        toastNoteSaved: 'Nota salva!',
+        toastMicDenied: 'Permita acesso ao microfone para gravar.',
+        toastOpenAIError: 'Erro na OpenAI. Usando limpeza local.',
+        toastGenerating: 'Gerando...',
+        toastNeedsKey: 'Precisa de chave OpenAI em Config.',
+        toastSettingsSaved: 'Configuração salva!',
+        toastTapeDownloaded: 'Fita baixada!',
+        toastNoteDeleted: 'Nota excluída',
+        toastLangSwitched: 'Agora em Português brasileiro',
+        confirmDelete: 'Excluir esta nota? Essa ação não pode ser desfeita.',
+        shareFooter: 'Feito com Fita · tropicgirlie.github.io/fita',
+        askNoNote: 'Nota não encontrada.',
+        askNoKey: 'Para perguntar sobre a nota, adicione sua chave OpenAI em Config.',
+        askFailed: 'Não consegui responder agora.',
+        months: ['JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ'],
+        styleLabels: { claro: 'Claro & Simples', diario: 'Diário', lista: 'Lista', blog: 'Post de Blog', email: 'E-mail', whatsapp: 'WhatsApp' },
+        folderMap: { diario: 'Diário', blog: 'Ideias', email: 'Trabalho', lista: 'Trabalho' },
+        recognitionLocale: 'pt-BR',
+        whisperLang: 'pt',
+        whisperPrompt: 'Transcrição em português do Brasil com pontuação natural, nomes próprios e acentuação correta.',
       },
-      {
-        id: '2',
-        date: '10 OUT, 2026',
-        title: 'Controle os esforços, não o resultado',
-        folder: 'Leitura',
-        tags: ['estoicismo', 'produto'],
-        style: 'Post de Blog',
-        transcript: 'Hoje me peguei atualizando o painel de lançamento de dez em dez minutos, tipo como se olhar os números fosse mudar alguma coisa. Os estoicos chamavam isso de dicotomia do controle. O que eu controlo é a qualidade do trabalho de hoje.',
-        content: 'Hoje me peguei atualizando o painel de métricas a cada dez minutos, como se observar os números fosse fazê-los subir. Não vai.\n\nO que eu realmente controlo é bem menor e mais honesto: o cuidado com que fiz o trabalho de hoje, as perguntas que fiz ao time e a forma como tratei as pessoas enquanto aguardávamos. Os estoicos chamavam isso de dicotomia do controle.\n\nEpitecto resumiu de forma simples: algumas coisas dependem de nós; outras, não.'
+      'en': {
+        pageTitle: 'Fita · Record your tape of thoughts',
+        langBadge: 'EN · Side B',
+        labelSub: 'Multilingual Voice ★ Stereo ★ 90 min',
+        chipClaro: 'Clear', chipDiario: 'Journal', chipLista: 'List', chipBlog: 'Blog', chipEmail: 'Email', chipWhats: 'Chat',
+        titleRestart: 'Restart', titleRecord: 'Record / Stop', titleCancel: 'Cancel',
+        pausePause: 'pause', pauseResume: 'resume',
+        titleBack: 'Back', titleStar: 'Star', titleDelete: 'Delete',
+        folderAll: 'All', folderStarred: '★ Starred', folderIdeas: 'Ideas', folderJournal: 'Journal', folderWork: 'Work', folderReading: 'Reading',
+        searchPh: 'Search your tapes...',
+        tabNote: 'Note', tabTranscript: 'Spoken', tabSummary: 'Summary',
+        actionAsk: 'Ask', actionCreate: 'Create', actionShare: 'Share', actionEdit: 'Edit', actionCopy: 'Copy',
+        createTweet: 'Tweet (280 characters)', createThread: 'X thread', createEmail: 'Professional email', createLinkedin: 'LinkedIn post', createChecklist: 'Action checklist', createHashtags: 'Hashtags',
+        askTitle: 'Ask about this note', askPh: 'e.g. What are the three main points?', askSend: 'Ask', askThinking: 'Thinking...',
+        keyboardTitle1: 'Speak naturally.', keyboardTitle2: 'Reply better.',
+        keyboardSub: 'Record a quick message to paste into Slack, Teams, email or chat.',
+        quickWhats: 'Style: Natural chat', quickClear: 'Style: Clear & Simple', quickEmail: 'Style: Professional email', quickList: 'Style: Quick list',
+        quickOutPh: 'Your clean message will appear here...',
+        quickRecord: '🎙️ Dictate in English', quickStop: '⏹️ Stop & Clean', quickCopy: 'Copy',
+        settingsTitle1: 'Set', settingsTitle2: 'tings',
+        aboutTitle: '★ ABOUT THIS TAPE',
+        aboutBody: 'Fita (Portuguese for "cassette tape") is a design and engineering experiment: a digital cassette for capturing spoken thoughts. Your audio and notes stay in your browser. With an optional OpenAI key, audio is sent to OpenAI for transcription (retained up to 30 days by them).',
+        langSectionTitle: 'Language',
+        langSectionBody: 'Pick the language for speech recognition, interface, and AI rewrites.',
+        langPTLabel: '🇧🇷 Portuguese (Brazilian)', langENLabel: '🇬🇧 English (multicultural)',
+        aiTitle: 'AI mode',
+        aiBody: 'Without a key: uses the browser\'s native speech recognition + local cleanup. With an OpenAI key: records real audio and runs it through <strong>Whisper</strong> + <strong>GPT-4o-mini</strong>.',
+        apiKeyLabel: 'OpenAI API Key',
+        apiSave: 'Save key locally',
+        dialectTitle: 'Multicultural English cleanup',
+        dialectBody: '• Removes fillers: <em>um, uh, like, you know, kind of, basically, I mean, sort of</em><br>• Preserves non-native voice and phrasing (does not "correct" ESL speakers into American idioms)<br>• Keeps names, domain terms, and your personality intact',
+        exportTitle: 'Export notes',
+        exportBody: 'Your notes live in local browser storage. Download a JSON copy to keep or migrate.',
+        exportBtn: 'Download full tape (.json)',
+        navTapes: 'Tapes', navKeyboard: 'Keyboard', navSettings: 'Settings',
+        statusReady: 'Ready · tap REC',
+        statusRecording: '● REC · English',
+        statusDictating: 'Dictating · quick mode',
+        statusPolishing: 'Polishing the text...',
+        statusListening: 'Listening...',
+        emptyState: 'No tapes here yet.<br>Tap REC to record your first.',
+        transcriptUnavailable: 'Transcript unavailable.',
+        summaryGenerating: 'Generating summary...',
+        summaryEmpty: 'Nothing to summarize.',
+        toastQuickReady: 'Message ready to paste!',
+        toastNoteCopied: 'Note copied!',
+        toastCopied: 'Copied!',
+        toastCopiedShare: 'Copied to share!',
+        toastCopiedClipboard: 'Copied to clipboard!',
+        toastStarred: 'Starred', toastUnstarred: 'Removed from starred',
+        toastNoteSaved: 'Note saved!',
+        toastMicDenied: 'Please allow microphone access to record.',
+        toastOpenAIError: 'OpenAI error. Using local cleanup.',
+        toastGenerating: 'Generating...',
+        toastNeedsKey: 'Add your OpenAI key in Settings.',
+        toastSettingsSaved: 'Settings saved!',
+        toastTapeDownloaded: 'Tape downloaded!',
+        toastNoteDeleted: 'Note deleted',
+        toastLangSwitched: 'Now in English (multicultural)',
+        confirmDelete: 'Delete this note? This cannot be undone.',
+        shareFooter: 'Made with Fita · tropicgirlie.github.io/fita',
+        askNoNote: 'Note not found.',
+        askNoKey: 'To ask about this note, add your OpenAI key in Settings.',
+        askFailed: 'Could not answer right now.',
+        months: ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'],
+        styleLabels: { claro: 'Clear & Simple', diario: 'Journal', lista: 'List', blog: 'Blog Post', email: 'Email', whatsapp: 'Chat' },
+        folderMap: { diario: 'Journal', blog: 'Ideas', email: 'Work', lista: 'Work' },
+        recognitionLocale: 'en-US',
+        whisperLang: 'en',
+        whisperPrompt: 'Transcription in English with natural punctuation. The speaker may be a non-native English speaker from any country; transcribe their words faithfully without correcting grammar or substituting idioms.',
       }
-    ];
+    };
+
+    let currentLang = localStorage.getItem('voicenoite_lang') || 'pt-BR';
+    function t(key) { return (I18N[currentLang] && I18N[currentLang][key]) || key; }
+
+    // ---------- SEED DATA (per language) ----------
+    const SEED_NOTES_BY_LANG = {
+      'pt-BR': [
+        {
+          id: '1',
+          date: '11 OUT, 2026',
+          title: 'Em defesa do tédio',
+          folder: 'Diário',
+          tags: ['hábitos', 'foco'],
+          style: 'Claro & Simples',
+          transcript: 'Ah, cara, tipo, eu tava na fila do café hoje e percebi que não lembro a última vez que fiquei entediado de verdade, sabe? Qualquer dois minutos livres eu já pego o celular. E aí é justamente nesses momentos, tipo no banho ou dirigindo, que vinham minhas melhores ideias.',
+          content: 'Não me lembro da última vez em que fiquei realmente entediado. Cada pequena brecha do dia é preenchida antes mesmo que eu perceba: o elevador, a fila do café, os trinta segundos antes de uma reunião começar. Uma manchete, uma mensagem, um vídeo que vou esquecer até a hora do almoço.\n\nO curioso é que essas pausas eram justamente o espaço onde meus melhores pensamentos surgiam. No chuveiro, numa viagem longa de carro, esperando um voo atrasado. O tédio nunca foi tempo perdido: era a sala onde minha mente precisava passear para algum lugar que eu não tinha planejado.'
+        },
+        {
+          id: '2',
+          date: '10 OUT, 2026',
+          title: 'Controle os esforços, não o resultado',
+          folder: 'Leitura',
+          tags: ['estoicismo', 'produto'],
+          style: 'Post de Blog',
+          transcript: 'Hoje me peguei atualizando o painel de lançamento de dez em dez minutos, tipo como se olhar os números fosse mudar alguma coisa. Os estoicos chamavam isso de dicotomia do controle. O que eu controlo é a qualidade do trabalho de hoje.',
+          content: 'Hoje me peguei atualizando o painel de métricas a cada dez minutos, como se observar os números fosse fazê-los subir. Não vai.\n\nO que eu realmente controlo é bem menor e mais honesto: o cuidado com que fiz o trabalho de hoje, as perguntas que fiz ao time e a forma como tratei as pessoas enquanto aguardávamos. Os estoicos chamavam isso de dicotomia do controle.\n\nEpitecto resumiu de forma simples: algumas coisas dependem de nós; outras, não.'
+        }
+      ],
+      'en': [
+        {
+          id: '1',
+          date: '11 NOV, 2026',
+          title: 'A quiet case for boredom',
+          folder: 'Journal',
+          tags: ['habits', 'focus'],
+          style: 'Clear & Simple',
+          transcript: 'So, um, I was like standing in line for coffee today and kind of realized I don\'t remember the last time I was, you know, actually bored. Any two free minutes, I just grab my phone. And honestly it\'s in those moments, like in the shower or driving, that my best ideas used to come.',
+          content: 'I can\'t remember the last time I was actually bored. Every small gap in the day gets filled before I even notice: the lift, the coffee queue, the thirty seconds before a meeting starts. A headline, a message, a video I\'ll forget by lunch.\n\nThe strange thing is, those pauses were exactly where my best thinking used to happen. In the shower, on a long drive, waiting for a delayed flight. Boredom was never wasted time: it was the room my mind wandered through on the way somewhere I had not planned.'
+        },
+        {
+          id: '2',
+          date: '10 NOV, 2026',
+          title: 'Control the effort, not the outcome',
+          folder: 'Reading',
+          tags: ['stoicism', 'product'],
+          style: 'Blog Post',
+          transcript: 'Today I caught myself refreshing the launch dashboard every ten minutes, like, as if staring at the numbers would change anything. The Stoics called this the dichotomy of control. What I control is the quality of today\'s work.',
+          content: 'Today I caught myself refreshing the metrics dashboard every ten minutes, as if watching the numbers would push them up. It will not.\n\nWhat I actually control is smaller and more honest: the care I put into today\'s work, the questions I asked my team, and how I treated people while we waited. The Stoics called this the dichotomy of control.\n\nEpictetus put it simply: some things are up to us; others are not.'
+        }
+      ]
+    };
+    const SEED_NOTES = SEED_NOTES_BY_LANG[currentLang] || SEED_NOTES_BY_LANG['pt-BR'];
 
     // ---------- STATE ----------
     let notes = JSON.parse(localStorage.getItem('voicenoite_notes') || 'null') || SEED_NOTES;
@@ -1347,14 +1577,7 @@
     let liveText = '';
     let quickMode = false;
 
-    const STYLE_LABELS = {
-      claro: 'Claro & Simples',
-      diario: 'Diário',
-      lista: 'Lista',
-      blog: 'Post de Blog',
-      email: 'E-mail',
-      whatsapp: 'WhatsApp'
-    };
+    function styleLabel(key) { return (I18N[currentLang].styleLabels[key]) || key; }
 
     // Waveform bars
     const waveformEl = document.getElementById('waveform');
@@ -1382,39 +1605,106 @@
       return `${m}:${s}`;
     }
 
-    function formatDatePT() {
-      const months = ['JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ'];
+    function formatDate() {
+      const months = I18N[currentLang].months;
       const d = new Date();
       return `${String(d.getDate()).padStart(2,'0')} ${months[d.getMonth()]}, ${d.getFullYear()}`;
     }
 
-    // ---------- PT-BR LOCAL CLEANER ----------
-    function cleanPortugueseLocal(raw, style) {
+    // ---------- LOCAL CLEANER (fallback when no OpenAI key) ----------
+    const FILLERS = {
+      'pt-BR': /\b(tipo assim|tipo|né|aí|então|assim|sabe|cara|mano|véi|enfim|bom|olha|tá ligado|quer dizer|na verdade|ééé|hã|aham)\b[,]?/gi,
+      'en': /\b(um+|uh+|er+|erm+|like|you know|kind of|kinda|sort of|basically|literally|i mean|actually|honestly|right\?|i guess|anyway)\b[,]?/gi
+    };
+    const LOCAL_STRINGS = {
+      'pt-BR': {
+        noAudio: { title: 'Nota sem áudio', content: 'Nenhum texto foi capturado.', tag: 'geral' },
+        tagJournal: 'diário', tagIdeas: 'ideias',
+        titleDefault: 'Nova anotação', titleList: 'Lista rápida', titleEmail: 'Rascunho de e-mail', titleChat: 'Mensagem rápida',
+        emailOpen: 'Olá,\n\n', emailClose: '\n\nQualquer dúvida, estou à disposição.\n\nAbraço,'
+      },
+      'en': {
+        noAudio: { title: 'Empty note', content: 'No text was captured.', tag: 'general' },
+        tagJournal: 'journal', tagIdeas: 'ideas',
+        titleDefault: 'New note', titleList: 'Quick list', titleEmail: 'Email draft', titleChat: 'Quick message',
+        emailOpen: 'Hi,\n\n', emailClose: '\n\nHappy to answer any questions.\n\nThanks,'
+      }
+    };
+
+    function cleanLocal(raw, style) {
+      const L = LOCAL_STRINGS[currentLang];
       let text = (raw || '').trim();
-      if (!text) return { title: 'Nota sem áudio', content: 'Nenhum texto foi capturado.', tags: ['geral'] };
-      const fillers = /\b(tipo assim|tipo|né|aí|então|assim|sabe|cara|mano|véi|enfim|bom|olha|tá ligado|quer dizer|na verdade|ééé|hã|aham)\b[,]?/gi;
+      if (!text) return { title: L.noAudio.title, content: L.noAudio.content, tags: [L.noAudio.tag] };
+      const fillers = FILLERS[currentLang];
       text = text.replace(fillers, '').replace(/\s{2,}/g, ' ').replace(/\s+([,.!?])/g, '$1').trim();
       text = text.charAt(0).toUpperCase() + text.slice(1);
       if (!/[.!?]$/.test(text)) text += '.';
 
       const words = text.split(' ').slice(0, 5).join(' ').replace(/[,.!?]/g, '');
-      let title = words || 'Nova anotação';
+      let title = words || L.titleDefault;
 
       if (style === 'lista') {
         const parts = text.split(/[.;]+/).map(s => s.trim()).filter(Boolean);
         text = parts.map(p => `• ${p.charAt(0).toUpperCase() + p.slice(1)}`).join('\n');
-        title = 'Lista rápida';
+        title = L.titleList;
       } else if (style === 'email') {
-        text = `Olá,\n\n${text}\n\nQualquer dúvida, estou à disposição.\n\nAbraço,`;
-        title = 'Rascunho de e-mail';
+        text = `${L.emailOpen}${text}${L.emailClose}`;
+        title = L.titleEmail;
       } else if (style === 'whatsapp') {
-        title = 'Mensagem rápida';
+        title = L.titleChat;
       }
 
-      return { title, content: text, tags: [style === 'diario' ? 'diário' : 'ideias'] };
+      return { title, content: text, tags: [style === 'diario' ? L.tagJournal : L.tagIdeas] };
     }
 
     // ---------- OPENAI WHISPER + GPT ----------
+    const STYLE_INSTRUCTIONS = {
+      'pt-BR': {
+        claro: 'Texto claro, fluido e bem estruturado em parágrafos curtos, preservando a voz do autor.',
+        diario: 'Entrada de diário reflexiva, íntima e natural em primeira pessoa.',
+        lista: 'Lista objetiva com marcadores (•), agrupando ações e ideias principais.',
+        blog: 'Mini-artigo envolvente com abertura forte e conclusão memorável.',
+        email: 'E-mail profissional brasileiro: cordial, direto e bem educado (sem formalidade excessiva).',
+        whatsapp: 'Mensagem curta e natural de WhatsApp, clara e sem vícios de fala.'
+      },
+      'en': {
+        claro: 'Clear, flowing text in short paragraphs, preserving the speaker\'s voice.',
+        diario: 'Reflective, intimate first-person journal entry.',
+        lista: 'Objective bulleted list (•) grouping actions and key ideas.',
+        blog: 'Short, engaging mini-article with a strong opening and memorable close.',
+        email: 'Professional email in a multicultural office: polite, direct, warm but not stiff.',
+        whatsapp: 'Short, natural chat message, clean and without filler.'
+      }
+    };
+
+    function systemPromptFor(style) {
+      const si = STYLE_INSTRUCTIONS[currentLang][style] || STYLE_INSTRUCTIONS[currentLang].claro;
+      if (currentLang === 'en') {
+        return `You are an expert editor working in a multicultural office.
+Transform the voice transcription below into clean, well-written English.
+RULES:
+- The speaker may be a non-native English speaker from any country. Preserve their phrasing, idioms, and personality. Do NOT "correct" them into American or British idioms, and do NOT flatten their voice.
+- Remove only true filler and disfluency: "um", "uh", "like", "you know", "kind of", "basically", "I mean", "sort of", stutters, and obvious repetitions.
+- Keep names, acronyms, domain terms, and numbers exactly as spoken. If a word is ambiguous (common across accents), pick the most plausible meaning in context and keep the speaker's register.
+- NEVER use em dashes (— or –). Use colons, commas, periods, or parentheses instead.
+- Avoid stock AI phrases ("In today's world", "In conclusion", "Let's dive in", "It's important to note").
+- Requested style: ${si}
+- Respond ONLY with valid JSON in the format:
+{"title": "Short, striking title", "content": "Rewritten text", "tags": ["tag1", "tag2"]}`;
+      }
+      return `Você é um editor especialista em Português do Brasil (PT-BR).
+Transforme a transcrição de voz abaixo em um texto limpo e bem escrito.
+REGRAS:
+- Use estritamente Português do Brasil natural (nunca português europeu, nunca tradução literal).
+- Remova vícios de oralidade (tipo, né, aí, então, assim, cara, enfim, sabe, gaguejos e repetições).
+- Preserve fielmente as ideias, fatos e personalidade de quem falou.
+- NUNCA use travessões (— ou –). Em vez disso use dois-pontos, vírgulas, pontos ou parênteses.
+- Evite construções tipicamente "de IA" (abertura "No mundo de hoje", encerramento com "Em resumo").
+- Estilo solicitado: ${si}
+- Responda APENAS em JSON válido no formato:
+{"title": "Título curto e marcante", "content": "Texto reescrito", "tags": ["tag1", "tag2"]}`;
+    }
+
     async function processWithOpenAI(audioBlob, fallbackTranscript, style) {
       const apiKey = localStorage.getItem('voicenoite_openai_key');
       if (!apiKey) return null;
@@ -1425,8 +1715,8 @@
         const form = new FormData();
         form.append('file', audioBlob, 'audio.webm');
         form.append('model', 'whisper-1');
-        form.append('language', 'pt');
-        form.append('prompt', 'Transcrição em português do Brasil com pontuação natural, nomes próprios e acentuação correta.');
+        form.append('language', I18N[currentLang].whisperLang);
+        form.append('prompt', I18N[currentLang].whisperPrompt);
 
         const wRes = await fetch('https://api.openai.com/v1/audio/transcriptions', {
           method: 'POST',
@@ -1441,27 +1731,6 @@
 
       if (!transcript) return null;
 
-      const styleInstructions = {
-        claro: 'Texto claro, fluido e bem estruturado em parágrafos curtos, preservando a voz do autor.',
-        diario: 'Entrada de diário reflexiva, íntima e natural em primeira pessoa.',
-        lista: 'Lista objetiva com marcadores (•), agrupando ações e ideias principais.',
-        blog: 'Mini-artigo envolvente com abertura forte e conclusão memorável.',
-        email: 'E-mail profissional brasileiro: cordial, direto e bem educado (sem formalidade excessiva).',
-        whatsapp: 'Mensagem curta e natural de WhatsApp, clara e sem vícios de fala.'
-      };
-
-      const sysPrompt = `Você é um editor especialista em Português do Brasil (PT-BR).
-Transforme a transcrição de voz abaixo em um texto limpo e bem escrito.
-REGRAS:
-- Use estritamente Português do Brasil natural (nunca português europeu, nunca tradução literal).
-- Remova vícios de oralidade (tipo, né, aí, então, assim, cara, enfim, sabe, gaguejos e repetições).
-- Preserve fielmente as ideias, fatos e personalidade de quem falou.
-- NUNCA use travessões (— ou –). Em vez disso use dois-pontos, vírgulas, pontos ou parênteses.
-- Evite construções tipicamente "de IA" (abertura "No mundo de hoje", encerramento com "Em resumo").
-- Estilo solicitado: ${styleInstructions[style] || styleInstructions.claro}
-- Responda APENAS em JSON válido no formato:
-{"title": "Título curto e marcante", "content": "Texto reescrito", "tags": ["tag1", "tag2"]}`;
-
       const gRes = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -1472,13 +1741,13 @@ REGRAS:
           model: 'gpt-4o-mini',
           response_format: { type: 'json_object' },
           messages: [
-            { role: 'system', content: sysPrompt },
+            { role: 'system', content: systemPromptFor(style) },
             { role: 'user', content: transcript }
           ]
         })
       });
 
-      if (!gRes.ok) throw new Error('Erro na API OpenAI');
+      if (!gRes.ok) throw new Error('OpenAI API error');
       const gData = await gRes.json();
       const parsed = JSON.parse(gData.choices[0].message.content);
       return { ...parsed, transcript };
@@ -1509,7 +1778,7 @@ REGRAS:
       document.getElementById('btn-pause').style.pointerEvents = 'auto';
       document.getElementById('btn-restart').disabled = false;
       document.getElementById('btn-cancel').disabled = false;
-      document.getElementById('status-hint').textContent = isQuick ? 'Ditando · modo rápido' : '● REC · Português';
+      document.getElementById('status-hint').textContent = isQuick ? t('statusDictating') : t('statusRecording');
       spinReels(true, false);
 
       const liveBox = document.getElementById('live-transcript');
@@ -1532,7 +1801,7 @@ REGRAS:
       const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (SpeechRec) {
         recognition = new SpeechRec();
-        recognition.lang = 'pt-BR';
+        recognition.lang = I18N[currentLang].recognitionLocale;
         recognition.continuous = true;
         recognition.interimResults = true;
         recognition.onresult = (e) => {
@@ -1544,7 +1813,7 @@ REGRAS:
             else interimStr += res;
           }
           liveText = (finalStr + interimStr).trim();
-          liveBox.textContent = liveText || 'Ouvindo...';
+          liveBox.textContent = liveText || t('statusListening');
         };
         try { recognition.start(); } catch (_) {}
       }
@@ -1555,7 +1824,7 @@ REGRAS:
         mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
         mediaRecorder.start();
       } catch (err) {
-        showToast('Permita acesso ao microfone para gravar.');
+        showToast(t('toastMicDenied'));
       }
     }
 
@@ -1570,13 +1839,13 @@ REGRAS:
       rec.classList.remove('recording');
       const pauseBtn = document.getElementById('btn-pause');
       pauseBtn.disabled = true;
-      pauseBtn.textContent = 'pausar';
+      pauseBtn.textContent = t('pausePause');
       pauseBtn.style.opacity = '0';
       pauseBtn.style.pointerEvents = 'none';
       document.getElementById('btn-restart').disabled = true;
       document.getElementById('btn-cancel').disabled = true;
       document.getElementById('live-transcript').classList.remove('visible');
-      document.getElementById('status-hint').textContent = 'Pronto · toque REC';
+      document.getElementById('status-hint').textContent = t('statusReady');
     }
 
     async function finishRecording(cancel = false) {
@@ -1598,38 +1867,41 @@ REGRAS:
       if (cancel) return;
 
       const activeStyle = quickMode ? document.getElementById('quick-style').value : selectedStyle;
-      document.getElementById('status-hint').textContent = 'Lapidando o texto...';
+      document.getElementById('status-hint').textContent = t('statusPolishing');
       spinReels(true, true);
 
       let result = null;
       try {
         result = await processWithOpenAI(audioBlob, capturedText, activeStyle);
       } catch (e) {
-        showToast('Erro na OpenAI. Usando limpeza local PT-BR.');
+        showToast(t('toastOpenAIError'));
       }
 
       if (!result) {
-        const local = cleanPortugueseLocal(capturedText, activeStyle);
+        const local = cleanLocal(capturedText, activeStyle);
         result = { ...local, transcript: capturedText || local.content };
       }
 
       spinReels(false);
-      document.getElementById('status-hint').textContent = 'Pronto · toque REC';
+      document.getElementById('status-hint').textContent = t('statusReady');
 
       if (quickMode) {
         document.getElementById('quick-output').value = result.content;
-        showToast('Mensagem pronta para colar!');
+        showToast(t('toastQuickReady'));
         return;
       }
 
-      const folderMap = { diario: 'Diário', blog: 'Ideias', email: 'Trabalho', lista: 'Trabalho' };
+      const folderMap = I18N[currentLang].folderMap;
+      const defaultFolder = currentLang === 'en' ? 'Ideas' : 'Ideias';
+      const defaultTag = currentLang === 'en' ? 'voice' : 'voz';
+      const defaultTitle = currentLang === 'en' ? 'New note' : 'Nova nota';
       const newNote = {
         id: String(Date.now()),
-        date: formatDatePT(),
-        title: result.title || 'Nova nota',
-        folder: folderMap[activeStyle] || 'Ideias',
-        tags: (result.tags && result.tags.length) ? result.tags : ['voz'],
-        style: STYLE_LABELS[activeStyle],
+        date: formatDate(),
+        title: result.title || defaultTitle,
+        folder: folderMap[activeStyle] || defaultFolder,
+        tags: (result.tags && result.tags.length) ? result.tags : [defaultTag],
+        style: styleLabel(activeStyle),
         transcript: result.transcript || capturedText,
         content: result.content
       };
@@ -1655,7 +1927,7 @@ REGRAS:
       });
 
       if (!filtered.length) {
-        list.innerHTML = `<div class="empty-state"><span class="emoji">📼</span><p>Nenhuma fita aqui ainda.<br>Toque REC para gravar sua primeira.</p></div>`;
+        list.innerHTML = `<div class="empty-state"><span class="emoji">📼</span><p>${t('emptyState')}</p></div>`;
         return;
       }
 
@@ -1708,12 +1980,12 @@ REGRAS:
       if (detailTab === 'note') {
         bodyEl.textContent = n.content;
       } else if (detailTab === 'transcript') {
-        bodyEl.textContent = n.transcript || 'Transcrição indisponível.';
+        bodyEl.textContent = n.transcript || t('transcriptUnavailable');
       } else if (detailTab === 'summary') {
         if (n.summary) {
           bodyEl.textContent = n.summary;
         } else {
-          bodyEl.textContent = 'Gerando resumo...';
+          bodyEl.textContent = t('summaryGenerating');
           const summary = await generateSummary(n);
           n.summary = summary;
           saveNotes();
@@ -1746,10 +2018,15 @@ REGRAS:
       } catch (e) { return null; }
     }
 
+    const SUMMARY_PROMPTS = {
+      'pt-BR': 'Resuma a nota a seguir em 3 a 5 marcadores (•) em português brasileiro. Capture as ideias centrais. NUNCA use travessões. Responda somente com os bullets, sem introdução.',
+      'en': 'Summarize the following note in 3 to 5 bullets (•) in English. Capture the core ideas. If the note is in English with a non-native voice, keep that voice. NEVER use em dashes. Respond only with the bullets, no intro.'
+    };
+
     async function generateSummary(note) {
       const source = note.content || note.transcript || '';
-      if (!source) return 'Sem conteúdo para resumir.';
-      const sys = 'Resuma a nota a seguir em 3 a 5 marcadores (•) em português brasileiro. Capture as ideias centrais. NUNCA use travessões. Responda somente com os bullets, sem introdução.';
+      if (!source) return t('summaryEmpty');
+      const sys = SUMMARY_PROMPTS[currentLang];
       const gpt = await callGPT(sys, source);
       if (gpt) return gpt;
       const sentences = source.split(/[.!?]+/).map(s => s.trim()).filter(s => s.length > 15);
@@ -1757,52 +2034,65 @@ REGRAS:
     }
 
     const CREATE_PROMPTS = {
-      tweet: 'Transforme a nota em um único tweet em português brasileiro, no máximo 280 caracteres, direto e com personalidade. Sem hashtags, sem travessões.',
-      thread: 'Transforme a nota em uma thread de 3 a 5 tweets em português brasileiro, numerados 1/, 2/, etc. Cada tweet com até 280 caracteres. Sem travessões.',
-      email: 'Transforme a nota em um e-mail profissional brasileiro: saudação cordial, 2 ou 3 parágrafos curtos, assinatura sem nome. Sem travessões.',
-      linkedin: 'Transforme a nota em um post de LinkedIn em português brasileiro: abertura que prende, 3 a 5 parágrafos curtos, fechamento com pergunta aberta. Sem hashtags no corpo. Sem travessões.',
-      checklist: 'Transforme a nota em uma lista de ação em português brasileiro. Cada item começa com verbo no infinitivo e tem checkbox [ ] no início. Sem travessões.',
-      hashtags: 'Gere 8 a 12 hashtags brasileiras relevantes para a nota, uma por linha, começando com #. Sem explicações.'
+      'pt-BR': {
+        tweet: 'Transforme a nota em um único tweet em português brasileiro, no máximo 280 caracteres, direto e com personalidade. Sem hashtags, sem travessões.',
+        thread: 'Transforme a nota em uma thread de 3 a 5 tweets em português brasileiro, numerados 1/, 2/, etc. Cada tweet com até 280 caracteres. Sem travessões.',
+        email: 'Transforme a nota em um e-mail profissional brasileiro: saudação cordial, 2 ou 3 parágrafos curtos, assinatura sem nome. Sem travessões.',
+        linkedin: 'Transforme a nota em um post de LinkedIn em português brasileiro: abertura que prende, 3 a 5 parágrafos curtos, fechamento com pergunta aberta. Sem hashtags no corpo. Sem travessões.',
+        checklist: 'Transforme a nota em uma lista de ação em português brasileiro. Cada item começa com verbo no infinitivo e tem checkbox [ ] no início. Sem travessões.',
+        hashtags: 'Gere 8 a 12 hashtags brasileiras relevantes para a nota, uma por linha, começando com #. Sem explicações.'
+      },
+      'en': {
+        tweet: 'Turn the note into a single tweet in English, under 280 characters, direct and with personality. No hashtags, no em dashes.',
+        thread: 'Turn the note into a 3-to-5 tweet X thread in English, numbered 1/, 2/, etc. Each tweet up to 280 characters. No em dashes.',
+        email: 'Turn the note into a professional email suitable for a multicultural office: warm greeting, 2 or 3 short paragraphs, signature without a name. No em dashes.',
+        linkedin: 'Turn the note into a LinkedIn post in English: hook opening, 3 to 5 short paragraphs, closing with an open question. No hashtags in the body. No em dashes.',
+        checklist: 'Turn the note into an action checklist in English. Each item starts with an imperative verb and has a checkbox [ ] at the start. No em dashes.',
+        hashtags: 'Generate 8 to 12 English hashtags relevant to the note, one per line, starting with #. No explanations.'
+      }
     };
 
     async function createDerivative(kind) {
       const n = notes.find(x => x.id === currentNoteId);
       if (!n) return;
-      showToast('Gerando...');
-      const sys = CREATE_PROMPTS[kind] || CREATE_PROMPTS.tweet;
+      showToast(t('toastGenerating'));
+      const prompts = CREATE_PROMPTS[currentLang];
+      const sys = prompts[kind] || prompts.tweet;
       const result = await callGPT(sys, n.content || n.transcript || '');
       if (!result) {
-        showToast('Precisa de chave OpenAI em Config.');
+        showToast(t('toastNeedsKey'));
         return;
       }
       try { await navigator.clipboard.writeText(result); } catch (_) {}
       const win = window.open('', '_blank');
       if (win) {
-        win.document.write(`<title>VoiceNoite · ${kind}</title><style>body{font-family:system-ui;padding:28px;max-width:640px;margin:auto;white-space:pre-wrap;line-height:1.55}</style>${result.replace(/</g,'&lt;')}`);
+        win.document.write(`<title>Fita · ${kind}</title><style>body{font-family:system-ui;padding:28px;max-width:640px;margin:auto;white-space:pre-wrap;line-height:1.55}</style>${result.replace(/</g,'&lt;')}`);
       } else {
-        showToast('Copiado para a área de transferência!');
+        showToast(t('toastCopiedClipboard'));
       }
     }
 
     async function askAboutNote(question) {
       const n = notes.find(x => x.id === currentNoteId);
-      if (!n) return 'Nota não encontrada.';
+      if (!n) return t('askNoNote');
       const apiKey = localStorage.getItem('voicenoite_openai_key');
-      if (!apiKey) return 'Para perguntar sobre a nota, adicione sua chave OpenAI em Config.';
-      const sys = `Você responde perguntas sobre a nota de voz a seguir, em português brasileiro, de forma curta e direta. Use apenas o que está na nota. NUNCA use travessões.\n\nNOTA:\n${n.content}\n\nTRANSCRIÇÃO ORIGINAL:\n${n.transcript || '(sem transcrição)'}`;
+      if (!apiKey) return t('askNoKey');
+      const sys = currentLang === 'en'
+        ? `You answer questions about the voice note below, in English, briefly and directly. Use only what is in the note. NEVER use em dashes.\n\nNOTE:\n${n.content}\n\nORIGINAL TRANSCRIPT:\n${n.transcript || '(no transcript)'}`
+        : `Você responde perguntas sobre a nota de voz a seguir, em português brasileiro, de forma curta e direta. Use apenas o que está na nota. NUNCA use travessões.\n\nNOTA:\n${n.content}\n\nTRANSCRIÇÃO ORIGINAL:\n${n.transcript || '(sem transcrição)'}`;
       const answer = await callGPT(sys, question);
-      return answer || 'Não consegui responder agora.';
+      return answer || t('askFailed');
     }
 
     function shareNote() {
       const n = notes.find(x => x.id === currentNoteId);
       if (!n) return;
-      const text = `${n.title}\n\n${n.content}\n\nFeito com VoiceNoite · tropicgirlie.github.io/voicenoite`;
+      const text = `${n.title}\n\n${n.content}\n\n${t('shareFooter')}`;
       if (navigator.share) {
         navigator.share({ title: n.title, text }).catch(() => {});
       } else {
         navigator.clipboard.writeText(text);
-        showToast('Copiado para compartilhar!');
+        showToast(t('toastCopiedShare'));
       }
     }
 
@@ -1824,7 +2114,7 @@ REGRAS:
     document.getElementById('btn-pause').addEventListener('click', (e) => {
       e.stopPropagation();
       isPaused = !isPaused;
-      document.getElementById('btn-pause').textContent = isPaused ? 'retomar' : 'pausar';
+      document.getElementById('btn-pause').textContent = isPaused ? t('pauseResume') : t('pausePause');
       if (mediaRecorder) isPaused ? mediaRecorder.pause() : mediaRecorder.resume();
       spinReels(isRecording && !isPaused);
     });
@@ -1866,16 +2156,16 @@ REGRAS:
       const n = notes.find(x => x.id === currentNoteId);
       if (!n) return;
       navigator.clipboard.writeText(`${n.title}\n\n${n.content}`);
-      showToast('Nota copiada!');
+      showToast(t('toastNoteCopied'));
     });
 
     document.getElementById('btn-delete').addEventListener('click', () => {
-      if (!confirm('Excluir esta nota? Essa ação não pode ser desfeita.')) return;
+      if (!confirm(t('confirmDelete'))) return;
       notes = notes.filter(x => x.id !== currentNoteId);
       saveNotes();
       renderNotes();
       switchView('view-notes');
-      showToast('Nota excluída');
+      showToast(t('toastNoteDeleted'));
     });
 
     document.getElementById('btn-star').addEventListener('click', () => {
@@ -1885,7 +2175,7 @@ REGRAS:
       saveNotes();
       renderDetail();
       renderNotes();
-      showToast(n.starred ? 'Favoritada' : 'Removida das favoritas');
+      showToast(n.starred ? t('toastStarred') : t('toastUnstarred'));
     });
 
     document.getElementById('btn-share').addEventListener('click', shareNote);
@@ -1900,7 +2190,7 @@ REGRAS:
           n.content = document.getElementById('detail-edit').value;
           n.summary = null;
           saveNotes();
-          showToast('Nota salva!');
+          showToast(t('toastNoteSaved'));
         }
         isEditing = false;
       } else {
@@ -1939,7 +2229,7 @@ REGRAS:
       if (!q) return;
       const ans = document.getElementById('ask-answer');
       ans.classList.add('visible');
-      ans.textContent = 'Pensando...';
+      ans.textContent = t('askThinking');
       const result = await askAboutNote(q);
       ans.textContent = result;
     });
@@ -1951,10 +2241,10 @@ REGRAS:
     document.getElementById('btn-quick-record').addEventListener('click', () => {
       const btn = document.getElementById('btn-quick-record');
       if (!isRecording) {
-        btn.textContent = '⏹️ Parar e Limpar';
+        btn.textContent = t('quickStop');
         startRecording(true);
       } else {
-        btn.textContent = '🎙️ Ditar em PT-BR';
+        btn.textContent = t('quickRecord');
         finishRecording(false);
       }
     });
@@ -1963,7 +2253,7 @@ REGRAS:
       const txt = document.getElementById('quick-output').value;
       if (!txt) return;
       navigator.clipboard.writeText(txt);
-      showToast('Copiado!');
+      showToast(t('toastCopied'));
     });
 
     // Settings
@@ -1972,7 +2262,7 @@ REGRAS:
       const val = document.getElementById('api-key-input').value.trim();
       if (val) localStorage.setItem('voicenoite_openai_key', val);
       else localStorage.removeItem('voicenoite_openai_key');
-      showToast('Configuração salva!');
+      showToast(t('toastSettingsSaved'));
     });
 
     // Export
@@ -1982,16 +2272,177 @@ REGRAS:
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `voicenoite-${new Date().toISOString().split('T')[0]}.json`;
+      a.download = `fita-${new Date().toISOString().split('T')[0]}.json`;
       a.click();
       URL.revokeObjectURL(url);
-      showToast('Fita baixada!');
+      showToast(t('toastTapeDownloaded'));
     });
 
     document.querySelectorAll('.nav-btn').forEach(btn => {
       btn.addEventListener('click', () => switchView(btn.dataset.view));
     });
 
+    // ---------- APPLY LANGUAGE TO STATIC UI ----------
+    const setText = (sel, val) => { const el = document.querySelector(sel); if (el) el.textContent = val; };
+    const setHtml = (sel, val) => { const el = document.querySelector(sel); if (el) el.innerHTML = val; };
+    const setTitle = (sel, val) => { const el = document.querySelector(sel); if (el) el.title = val; };
+    const setPh = (sel, val) => { const el = document.querySelector(sel); if (el) el.placeholder = val; };
+
+    function applyLang() {
+      document.getElementById('html-root').lang = currentLang === 'en' ? 'en' : 'pt-BR';
+      setText('#page-title', t('pageTitle'));
+      setText('#lang-toggle', t('langBadge'));
+
+      // Cassette label sub
+      const subEl = document.querySelector('.label-sub');
+      if (subEl) subEl.textContent = t('labelSub');
+
+      // Style chips (data-style)
+      document.querySelectorAll('.chip[data-style]').forEach(b => {
+        const key = b.dataset.style;
+        const map = { claro: 'chipClaro', diario: 'chipDiario', lista: 'chipLista', blog: 'chipBlog', email: 'chipEmail', whatsapp: 'chipWhats' };
+        if (map[key]) b.textContent = t(map[key]);
+      });
+
+      // Recorder buttons
+      setTitle('#btn-restart', t('titleRestart'));
+      setTitle('#btn-record', t('titleRecord'));
+      setTitle('#btn-cancel', t('titleCancel'));
+      setTitle('#btn-back', t('titleBack'));
+      setTitle('#btn-star', t('titleStar'));
+      setTitle('#btn-delete', t('titleDelete'));
+      const pb = document.getElementById('btn-pause');
+      if (pb && !isRecording) pb.textContent = t('pausePause');
+      const sh = document.getElementById('status-hint');
+      if (sh && !isRecording) sh.textContent = t('statusReady');
+
+      // Folder tabs
+      const folderTexts = {
+        'Todas': t('folderAll'), '★': t('folderStarred'),
+        'Ideias': t('folderIdeas'), 'Diário': t('folderJournal'),
+        'Trabalho': t('folderWork'), 'Leitura': t('folderReading')
+      };
+      document.querySelectorAll('.folder-tab').forEach(b => {
+        if (folderTexts[b.dataset.folder]) b.textContent = folderTexts[b.dataset.folder];
+      });
+
+      setPh('#search-input', t('searchPh'));
+
+      // Detail tabs
+      setText('#tab-note', t('tabNote'));
+      setText('#tab-transcript', t('tabTranscript'));
+      setText('#tab-summary', t('tabSummary'));
+
+      // Action grid buttons
+      document.querySelector('#btn-ask span:nth-child(2)').textContent = t('actionAsk');
+      document.querySelector('#btn-create span:nth-child(2)').textContent = t('actionCreate');
+      document.querySelector('#btn-share span:nth-child(2)').textContent = t('actionShare');
+      document.querySelector('#btn-edit span:nth-child(2)').textContent = t('actionEdit');
+      document.querySelector('#btn-copy-note span:nth-child(2)').textContent = t('actionCopy');
+
+      // Create menu
+      const createMap = { tweet: 'createTweet', thread: 'createThread', email: 'createEmail', linkedin: 'createLinkedin', checklist: 'createChecklist', hashtags: 'createHashtags' };
+      document.querySelectorAll('.create-opt').forEach(b => {
+        if (createMap[b.dataset.kind]) b.textContent = t(createMap[b.dataset.kind]);
+      });
+
+      // Ask modal
+      setText('#ask-modal h3', t('askTitle'));
+      setPh('#ask-input', t('askPh'));
+      setText('#btn-ask-send', t('askSend'));
+
+      // Keyboard view
+      const sectionTitle = document.querySelector('#view-keyboard .section-title');
+      if (sectionTitle) sectionTitle.innerHTML = `${t('keyboardTitle1')}<br><em>${t('keyboardTitle2')}</em>`;
+      const sectionSub = document.querySelector('#view-keyboard .section-sub');
+      if (sectionSub) sectionSub.textContent = t('keyboardSub');
+
+      // Quick style select
+      const qsel = document.getElementById('quick-style');
+      if (qsel) {
+        const qmap = { whatsapp: 'quickWhats', claro: 'quickClear', email: 'quickEmail', lista: 'quickList' };
+        [...qsel.options].forEach(o => { if (qmap[o.value]) o.textContent = t(qmap[o.value]); });
+      }
+      setPh('#quick-output', t('quickOutPh'));
+      const qrec = document.getElementById('btn-quick-record');
+      if (qrec && !isRecording) qrec.textContent = t('quickRecord');
+      setText('#btn-quick-copy', t('quickCopy'));
+
+      // Settings view
+      const settingsTitle = document.querySelector('#view-settings .section-title');
+      if (settingsTitle) settingsTitle.innerHTML = `${t('settingsTitle1')}<em>${t('settingsTitle2')}</em>`;
+      setText('.about-card .title', t('aboutTitle'));
+      setText('.about-card p', t('aboutBody'));
+
+      // Language section (dynamic, inserted below)
+      const langCardTitle = document.querySelector('#lang-card h3');
+      if (langCardTitle) langCardTitle.textContent = t('langSectionTitle');
+      const langCardBody = document.querySelector('#lang-card p');
+      if (langCardBody) langCardBody.textContent = t('langSectionBody');
+      setText('#lang-opt-pt .lang-opt-label', t('langPTLabel'));
+      setText('#lang-opt-en .lang-opt-label', t('langENLabel'));
+
+      // AI mode card
+      const aiTitle = document.querySelector('#ai-card h3');
+      if (aiTitle) aiTitle.textContent = t('aiTitle');
+      const aiBody = document.querySelector('#ai-card .ai-body');
+      if (aiBody) aiBody.innerHTML = t('aiBody');
+      const apiLabel = document.querySelector('#ai-card .field-label');
+      if (apiLabel) apiLabel.textContent = t('apiKeyLabel');
+      setText('#btn-save-key', t('apiSave'));
+
+      // Dialect card
+      const dialectTitle = document.querySelector('#dialect-card h3');
+      if (dialectTitle) dialectTitle.textContent = t('dialectTitle');
+      const dialectBody = document.querySelector('#dialect-card p');
+      if (dialectBody) dialectBody.innerHTML = t('dialectBody');
+
+      // Export card
+      const exportTitle = document.querySelector('#export-card h3');
+      if (exportTitle) exportTitle.textContent = t('exportTitle');
+      const exportBody = document.querySelector('#export-card p');
+      if (exportBody) exportBody.textContent = t('exportBody');
+      setText('#btn-export', t('exportBtn'));
+
+      // Bottom nav
+      document.querySelectorAll('.nav-btn').forEach(b => {
+        const map = { 'view-notes': 'navTapes', 'view-keyboard': 'navKeyboard', 'view-settings': 'navSettings' };
+        const key = map[b.dataset.view];
+        if (key) {
+          const icon = b.querySelector('.nav-icon').outerHTML;
+          b.innerHTML = icon + t(key);
+        }
+      });
+
+      // Highlight current language in settings
+      document.querySelectorAll('.lang-opt').forEach(o => {
+        o.classList.toggle('active', o.dataset.lang === currentLang);
+      });
+    }
+
+    function setLang(lang) {
+      if (!I18N[lang] || lang === currentLang) return;
+      currentLang = lang;
+      localStorage.setItem('voicenoite_lang', lang);
+      applyLang();
+      renderNotes();
+      if (currentNoteId && document.getElementById('view-detail').classList.contains('active')) {
+        renderDetail();
+      }
+      showToast(t('toastLangSwitched'));
+    }
+
+    // Language toggle in header: quick swap
+    document.getElementById('lang-toggle').addEventListener('click', () => {
+      setLang(currentLang === 'pt-BR' ? 'en' : 'pt-BR');
+    });
+
+    // Language picker in Settings
+    document.querySelectorAll('.lang-opt').forEach(btn => {
+      btn.addEventListener('click', () => setLang(btn.dataset.lang));
+    });
+
+    applyLang();
     renderNotes();
   </script>
 </body>
